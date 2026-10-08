@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HPSG – Home Protective Safe Guard (Student Concept)</title>
+<meta name="description" content="HPSG is a student concept for a friendly home safety hub that protects families from scams and real-world dangers. No subscription.">
+
+<style>
+/* =====================================================
+   1. THEME  (change these colors to restyle everything)
+   ===================================================== */
+:root {
+  --paper:  #fff6e5;   /* page background (warm paper) */
+  --paper2: #ffeccb;   /* alternate sections */
+  --ink:    #2b2b3a;   /* text + all the doodle outlines */
+  --mint:   #7be0c3;
+  --sky:    #8fd3ff;
+  --sun:    #ffd95e;
+  --coral:  #ff8f7a;
+  --lav:    #c9b6ff;
+  --pink:   #ffb3d1;
+  --warn:   #d62839;   /* red is ONLY for warnings */
+  --warnbg: #ffe1e3;
+  --okbg:   #d9f8ec;
+  --head: "Segoe Print","Bradley Hand","Chalkboard SE","Comic Sans MS",cursive;
+  --body: "Trebuchet MS",Verdana,"Segoe UI",sans-serif;
+}
+
+/* =====================================================
+   2. BASE
+   ===================================================== */
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 90px; }
+body {
+  margin: 0; font-family: var(--body); font-size: 1.15rem; line-height: 1.65;
+  color: var(--ink); background: var(--paper);
+  /* subtle dotted-notebook background */
+  background-image: radial-gradient(#e9d5ac 1.4px, transparent 1.4px);
+  background-size: 26px 26px;
+  overflow-x: hidden;
+}
+h1,h2,h3 { font-family: var(--head); line-height: 1.15; margin: 0 0 .5em; }
+h1 { font-size: clamp(2.3rem, 6vw, 3.9rem); }
+h2 { font-size: clamp(1.9rem, 4.5vw, 2.8rem); }
+h3 { font-size: 1.35rem; }
+p { margin: 0 0 1em; }
+a { color: var(--ink); }
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 20px; position: relative; }
+section { padding: 80px 0; position: relative; }
+section.alt { background: var(--paper2); }
+.eyebrow {
+  display: inline-block; font-family: var(--head); background: var(--sun); border: 2.5px solid var(--ink);
+  padding: 2px 16px; border-radius: 999px; transform: rotate(-2deg); font-weight: 700; margin-bottom: 14px;
+}
+.lead { font-size: 1.25rem; max-width: 760px; }
+.fine { font-size: 1rem; }
+a:focus-visible, button:focus-visible, textarea:focus-visible, input:focus-visible, summary:focus-visible, .timeline:focus-visible {
+  outline: 4px solid var(--warn); outline-offset: 3px;
+}
+.skip { position: absolute; left: -999px; top: 0; background: var(--sun); padding: 10px 16px; z-index: 100; border: 2.5px solid var(--ink); }
+.skip:focus { left: 10px; top: 10px; }
+
+/* Doodle SVG helper */
+.doodle { display: block; width: 100%; height: auto; }
+.deco { position: absolute; pointer-events: none; z-index: 0; }
+.bob { animation: bob 3.5s ease-in-out infinite; }
+@keyframes bob { 50% { transform: translateY(-10px) rotate(2deg); } }
+
+/* Chunky sticker buttons */
+.btn {
+  display: inline-block; font-family: var(--head); font-weight: 700; font-size: 1.15rem; cursor: pointer;
+  padding: 12px 28px; border: 3px solid var(--ink); border-radius: 16px; text-decoration: none; color: var(--ink);
+  box-shadow: 5px 5px 0 var(--ink); transition: transform .12s, box-shadow .12s;
+}
+.btn:hover { transform: translate(2px,2px); box-shadow: 3px 3px 0 var(--ink); }
+.btn:active { transform: translate(5px,5px); box-shadow: 0 0 0 var(--ink); }
+.btn-mint { background: var(--mint); } .btn-sun { background: var(--sun); } .btn-white { background: #fff; }
+.btn-small { font-size: .95rem; padding: 6px 16px; box-shadow: 3px 3px 0 var(--ink); }
+
+/* Sticker cards */
+.grid { display: grid; gap: 28px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+.card {
+  background: #fff; border: 3px solid var(--ink); border-radius: 22px; padding: 24px;
+  box-shadow: 7px 7px 0 var(--ink); position: relative; transition: transform .2s;
+}
+.grid .card:nth-child(odd)  { transform: rotate(-.8deg); }
+.grid .card:nth-child(even) { transform: rotate(.8deg); }
+.card:hover { transform: rotate(0) translateY(-4px) !important; }
+.card .pic { width: 130px; margin: 0 auto 10px; }
+.tint-mint { background: var(--okbg); } .tint-sky { background: #def2ff; } .tint-sun { background: #fff3bd; }
+.tint-pink { background: #ffe3ef; } .tint-lav { background: #ece4ff; } .tint-coral { background: #ffe3dc; }
+.price { font-family: var(--head); font-size: 1.5rem; font-weight: 700; }
+
+/* =====================================================
+   3. BANNER + NAV
+   ===================================================== */
+.concept-banner {
+  background: var(--sun); border-bottom: 3px solid var(--ink); text-align: center;
+  font-weight: 700; padding: 8px 12px; font-size: 1rem;
+}
+nav { position: sticky; top: 0; z-index: 50; background: var(--paper); border-bottom: 3px solid var(--ink); }
+.nav-inner { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 66px; flex-wrap: wrap; }
+.logo { display: flex; align-items: center; gap: 8px; font-family: var(--head); font-weight: 700; font-size: 1.6rem; text-decoration: none; }
+.logo svg { width: 44px; height: 48px; }
+.nav-links { display: flex; gap: 4px; flex-wrap: wrap; list-style: none; margin: 0; padding: 0; }
+.nav-links a { text-decoration: none; padding: 6px 12px; border-radius: 999px; font-weight: 700; font-size: 1rem; border: 2.5px solid transparent; }
+.nav-links a:hover { border-color: var(--ink); background: var(--mint); }
+#menuBtn { display: none; }
+@media (max-width: 960px) {
+  #menuBtn { display: block; }
+  .nav-links { display: none; width: 100%; flex-direction: column; padding-bottom: 10px; }
+  .nav-links.open { display: flex; }
+}
+
+/* Wavy divider between sections */
+.wave { display: block; width: 100%; height: 40px; margin-bottom: -2px; }
+
+/* =====================================================
+   4. HERO
+   ===================================================== */
+.hero { padding: 60px 0 90px; background: linear-gradient(#cfeeff 0%, #fff6e5 100%); border-bottom: 3px solid var(--ink); overflow: hidden; }
+.hero-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 30px; align-items: center; }
+.hero .tagline { font-family: var(--head); font-size: clamp(1.2rem, 3vw, 1.7rem); font-weight: 700; }
+.hero .tagline mark { background: var(--sun); padding: 0 8px; border-radius: 8px; }
+.hero .btn-row { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 26px; }
+.speech {
+  position: absolute; top: 0; right: 4%; background: #fff; border: 3px solid var(--ink); border-radius: 22px; padding: 8px 16px;
+  font-family: var(--head); font-weight: 700; transform: rotate(4deg); z-index: 2;
+}
+.speech::after { content: ""; position: absolute; bottom: -14px; left: 30px; border: 10px solid transparent; border-top-color: var(--ink); }
+.hero-art { position: relative; padding-top: 50px; }
+@media (max-width: 800px) { .hero-grid { grid-template-columns: 1fr; } .hero-art { max-width: 340px; margin: 0 auto; } }
+
+/* Stats strip */
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 18px; margin-top: -48px; position: relative; z-index: 3; }
+.stat { background: #fff; border: 3px solid var(--ink); border-radius: 18px; padding: 16px; text-align: center; box-shadow: 5px 5px 0 var(--ink); }
+.stat b { font-family: var(--head); font-size: 2rem; display: block; }
+
+/* =====================================================
+   5. PROBLEM
+   ===================================================== */
+.scam-msg { background: #fff; border: 3px solid var(--ink); border-radius: 18px 18px 18px 4px; padding: 14px 16px; position: relative; box-shadow: 5px 5px 0 var(--ink); }
+.scam-msg small { display: block; font-weight: 700; margin-bottom: 4px; }
+.stamp {
+  position: absolute; top: -14px; right: -8px; transform: rotate(8deg); background: var(--warnbg); color: var(--warn);
+  border: 3px solid var(--warn); border-radius: 8px; padding: 0 10px; font-family: var(--head); font-weight: 700; font-size: .95rem;
+}
+.stat-note { background: #fff; border: 3px dashed var(--ink); border-radius: 18px; padding: 18px; margin-top: 30px; }
+
+/* =====================================================
+   6. HOW IT WORKS
+   ===================================================== */
+.steps { counter-reset: s; display: grid; gap: 26px; grid-template-columns: repeat(auto-fit, minmax(230px,1fr)); list-style: none; padding: 0; margin: 34px 0 54px; }
+.steps li { counter-increment: s; background: #fff; border: 3px solid var(--ink); border-radius: 22px; padding: 20px; position: relative; box-shadow: 6px 6px 0 var(--ink); }
+.steps li::before {
+  content: counter(s); position: absolute; top: -18px; left: -10px; width: 42px; height: 42px; border-radius: 50%;
+  background: var(--coral); border: 3px solid var(--ink); display: grid; place-items: center; font-family: var(--head); font-weight: 700; font-size: 1.3rem;
+}
+.steps .pic { width: 110px; margin: 0 auto 8px; }
+
+.checker { background: #fff; border: 3px solid var(--ink); border-radius: 26px; padding: 28px; box-shadow: 8px 8px 0 var(--ink); display: grid; grid-template-columns: 1fr 150px; gap: 20px; }
+.checker textarea, form textarea {
+  width: 100%; min-height: 130px; font: inherit; padding: 14px; border: 3px solid var(--ink); border-radius: 14px; background: #fffdf7; color: var(--ink); resize: vertical;
+}
+.chips { display: flex; gap: 8px; flex-wrap: wrap; margin: 10px 0 14px; }
+.result { margin-top: 16px; padding: 16px; border-radius: 14px; border: 3px solid var(--ink); font-weight: 700; }
+.result[hidden] { display: none; }
+.result.bad { background: var(--warnbg); border-color: var(--warn); color: #6e0a14; }
+.result.good { background: var(--okbg); }
+.result ul { margin: 6px 0 0; padding-left: 24px; }
+.result .note { font-weight: 400; font-size: .95rem; margin: 8px 0 0; color: var(--ink); }
+@media (max-width: 760px) { .checker { grid-template-columns: 1fr; } .checker .mascot-side { max-width: 120px; margin: 0 auto; order: -1; } }
+
+/* =====================================================
+   7. PRODUCTS
+   ===================================================== */
+.led { width: 44px; height: 44px; border-radius: 50%; border: 3px solid var(--ink); background: #35d07f; box-shadow: 0 0 14px 4px #35d07f; transition: .3s; flex: none; }
+.led.danger { background: var(--warn); box-shadow: 0 0 20px 8px var(--warn); animation: flash .5s infinite alternate; }
+@keyframes flash { to { opacity: .35; } }
+.detector-demo { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 8px; }
+.strobe { height: 16px; border: 3px solid var(--ink); border-radius: 10px; margin-top: 8px; background: linear-gradient(90deg, var(--coral), var(--sun), var(--coral)); background-size: 200% 100%; animation: sweep 1s linear infinite; }
+@keyframes sweep { to { background-position: -200% 0; } }
+.spec { list-style: none; padding: 0; margin: 10px 0 0; font-size: 1rem; }
+.spec li::before { content: "✏️ "; }
+
+/* =====================================================
+   8. PACKAGES
+   ===================================================== */
+.table-scroll { overflow-x: auto; padding: 20px 6px 14px; }
+table.pkg { width: 100%; min-width: 680px; border-collapse: separate; border-spacing: 0; border: 3px solid var(--ink); border-radius: 22px; background: #fff; box-shadow: 8px 8px 0 var(--ink); overflow: hidden; }
+.pkg th, .pkg td { padding: 14px; text-align: center; border-bottom: 2.5px solid var(--ink); }
+.pkg tbody tr:last-child th, .pkg tbody tr:last-child td { border-bottom: 0; }
+.pkg th[scope="row"] { text-align: left; background: var(--paper2); }
+.pkg td + td, .pkg th + th, .pkg th[scope=row] + td { border-left: 2.5px dashed var(--ink); }
+.pkg thead th { background: var(--sky); font-family: var(--head); font-size: 1.2rem; vertical-align: bottom; }
+.pkg thead th.pop { background: var(--sun); }
+.pkg td.pop { background: #fff7cf; font-weight: 700; }
+.pkg .amount { display: block; font-size: 1.8rem; }
+.badge { display: inline-block; background: var(--coral); border: 2.5px solid var(--ink); border-radius: 999px; padding: 0 12px; font-size: .85rem; transform: rotate(-4deg); margin-bottom: 6px; }
+
+/* =====================================================
+   9. MODES / DEVICES / PRIVACY
+   ===================================================== */
+.compat { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(240px,1fr)); padding: 0; list-style: none; margin: 26px 0; }
+.compat li { background: #fff; border: 3px solid var(--ink); border-radius: 14px; padding: 10px 16px; display: flex; justify-content: space-between; align-items: center; font-weight: 700; box-shadow: 4px 4px 0 var(--ink); }
+.mark { width: 34px; height: 34px; border-radius: 50%; border: 3px solid var(--ink); display: grid; place-items: center; font-weight: 800; }
+.mark.yes { background: var(--mint); } .mark.some { background: var(--sun); } .mark.no { background: var(--warnbg); color: var(--warn); border-color: var(--warn); }
+.assistant-bubble { display: flex; align-items: center; gap: 16px; background: var(--lav); border: 3px solid var(--ink); border-radius: 22px; padding: 14px 20px; box-shadow: 6px 6px 0 var(--ink); max-width: 720px; }
+.assistant-bubble svg { width: 90px; flex: none; }
+
+/* =====================================================
+   10. ROADMAP
+   ===================================================== */
+.timeline { display: flex; gap: 22px; overflow-x: auto; padding: 36px 8px 24px; list-style: none; margin: 0; position: relative; }
+.timeline li { flex: 0 0 235px; background: #fff; border: 3px solid var(--ink); border-radius: 20px; padding: 20px; position: relative; box-shadow: 5px 5px 0 var(--ink); }
+.timeline li::before { content: ""; position: absolute; top: -22px; left: 24px; width: 22px; height: 22px; background: var(--coral); border: 3px solid var(--ink); border-radius: 50%; }
+.timeline li:nth-child(3n+2)::before { background: var(--mint); } .timeline li:nth-child(3n)::before { background: var(--sun); }
+.timeline .ver { font-family: var(--head); font-size: 1.6rem; font-weight: 700; display: block; }
+.timeline small { display: block; margin-top: 8px; font-weight: 700; }
+
+/* =====================================================
+   11. TESTIMONIALS / FAQ / FEEDBACK / FOOTER
+   ===================================================== */
+.avatar { width: 62px; float: left; margin-right: 12px; }
+.quote { font-style: italic; }
+details { background: #fff; border: 3px solid var(--ink); border-radius: 16px; padding: 4px 18px; margin-bottom: 14px; box-shadow: 4px 4px 0 var(--ink); }
+summary { cursor: pointer; font-weight: 700; padding: 12px 0; font-family: var(--head); font-size: 1.15rem; }
+details[open] { background: #fff3bd; }
+
+form.feedback { max-width: 660px; background: #fff; border: 3px solid var(--ink); border-radius: 24px; padding: 28px; box-shadow: 8px 8px 0 var(--ink); }
+fieldset { border: 0; padding: 0; margin: 0 0 18px; }
+legend { font-weight: 700; padding: 0; margin-bottom: 4px; }
+.stars { display: inline-flex; flex-direction: row-reverse; gap: 4px; }
+.stars input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.stars label { font-size: 2.8rem; line-height: 1; color: #fff; -webkit-text-stroke: 2.5px var(--ink); cursor: pointer; }
+.stars label:hover, .stars label:hover ~ label, .stars input:checked ~ label { color: var(--sun); }
+.stars input:focus-visible + label { outline: 4px solid var(--warn); border-radius: 8px; }
+.sr { position: absolute; left: -999px; }
+.thanks { max-width: 660px; background: var(--okbg); border: 3px solid var(--ink); border-radius: 24px; padding: 24px; box-shadow: 8px 8px 0 var(--ink); display: flex; gap: 16px; align-items: center; }
+.thanks[hidden] { display: none; }
+.thanks svg { width: 100px; flex: none; }
+
+footer { background: var(--ink); color: #fff6e5; padding: 50px 0; }
+footer a { color: var(--sun); }
+.foot-grid { display: grid; grid-template-columns: 120px 1fr; gap: 24px; align-items: center; }
+@media (max-width: 600px) { .foot-grid { grid-template-columns: 1fr; } }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .bob, .led.danger, .strobe { animation: none; }
+}
+</style>
+</head>
+
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+
+<!-- =====================================================
+     ALL CARTOON DRAWINGS live here as reusable <symbol>s.
+     Use them anywhere with: <svg viewBox="..."><use href="#id"/></svg>
+     Every drawing is plain SVG (no image files).
+     ===================================================== -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+<defs>
+  <!-- Shieldy the mascot -->
+  <symbol id="mascot" viewBox="0 0 120 140">
+    <path d="M60 6 14 22v36c0 34 20 56 46 70 26-14 46-36 46-70V22L60 6Z" fill="#7be0c3" stroke="#2b2b3a" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M60 18 26 30v28c0 26 14 44 34 56" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".6"/>
+    <ellipse cx="44" cy="62" rx="7" ry="9" fill="#fff" stroke="#2b2b3a" stroke-width="3"/><circle cx="46" cy="64" r="4" fill="#2b2b3a"/>
+    <ellipse cx="76" cy="62" rx="7" ry="9" fill="#fff" stroke="#2b2b3a" stroke-width="3"/><circle cx="78" cy="64" r="4" fill="#2b2b3a"/>
+    <path d="M44 86q16 16 32 0" fill="#fff" stroke="#2b2b3a" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="32" cy="80" r="6" fill="#ff8f7a" opacity=".7"/><circle cx="88" cy="80" r="6" fill="#ff8f7a" opacity=".7"/>
+    <path d="M40 48q5-5 10 0M70 48q5-5 10 0" fill="none" stroke="#2b2b3a" stroke-width="3" stroke-linecap="round"/>
+    <path d="M12 70q-12 4-10 18M108 70q12 4 10 18" fill="none" stroke="#2b2b3a" stroke-width="5" stroke-linecap="round"/>
+    <circle cx="3" cy="90" r="6" fill="#fff" stroke="#2b2b3a" stroke-width="3"/><circle cx="117" cy="90" r="6" fill="#fff" stroke="#2b2b3a" stroke-width="3"/>
+  </symbol>
+  <!-- Small logo version (shield + check) -->
+  <symbol id="logo" viewBox="0 0 64 72">
+    <path d="M32 4 6 14v22c0 17 11 28 26 33 15-5 26-16 26-33V14L32 4Z" fill="#7be0c3" stroke="#2b2b3a" stroke-width="4" stroke-linejoin="round"/>
+    <path d="m19 37 9 9 17-19" fill="none" stroke="#2b2b3a" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+  <!-- Grandma -->
+  <symbol id="grandma" viewBox="0 0 120 130">
+    <circle cx="60" cy="22" r="16" fill="#d9d9e6" stroke="#2b2b3a" stroke-width="4"/>
+    <path d="M22 118c0-34 16-50 38-50s38 16 38 50Z" fill="#c9b6ff" stroke="#2b2b3a" stroke-width="4"/>
+    <path d="M60 68v50" stroke="#2b2b3a" stroke-width="3"/><circle cx="52" cy="86" r="3" fill="#2b2b3a"/><circle cx="52" cy="102" r="3" fill="#2b2b3a"/>
+    <circle cx="60" cy="52" r="28" fill="#ffd3b0" stroke="#2b2b3a" stroke-width="4"/>
+    <path d="M32 46c2-22 54-22 56 0-10-12-46-12-56 0Z" fill="#d9d9e6" stroke="#2b2b3a" stroke-width="4" stroke-linejoin="round"/>
+    <circle cx="48" cy="54" r="8" fill="#fff" stroke="#2b2b3a" stroke-width="3"/><circle cx="72" cy="54" r="8" fill="#fff" stroke="#2b2b3a" stroke-width="3"/>
+    <path d="M56 54h8" stroke="#2b2b3a" stroke-width="3"/><circle cx="48" cy="55" r="2.5" fill="#2b2b3a"/><circle cx="72" cy="55" r="2.5" fill="#2b2b3a"/>
+    <path d="M50 68q10 9 20 0" fill="none" stroke="#2b2b3a" stroke-width="3.5" stroke-linecap="round"/>
+    <circle cx="40" cy="64" r="5" fill="#ff8f7a" opacity=".6"/><circle cx="80" cy="64" r="5" fill="#ff8f7a" opacity=".6"/>
+  </symbol>
+  <!-- Phone with scam warning -->
+  <symbol id="phone-scam" viewBox="0 0 90 140">
+    <rect x="8" y="6" width="74" height="128" rx="14" fill="#fff" stroke="#2b2b3a" stroke-width="5"/>
+    <rect x="16" y="22" width="58" height="92" rx="6" fill="#ffe1e3" stroke="#2b2b3a" stroke-width="3"/>
+    <path d="M45 34 66 74H24Z" fill="#ffd95e" stroke="#d62839" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M45 46v14" stroke="#d62839" stroke-width="5" stroke-linecap="round"/><circle cx="45" cy="67" r="2.6" fill="#d62839"/>
+    <path d="M26 88h38M26 98h28" stroke="#d62839" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="45" cy="124" r="4" fill="none" stroke="#2b2b3a" stroke-width="3"/>
+  </symbol>
+  <!-- Grandson (phone call) -->
+  <symbol id="grandson" viewBox="0 0 110 130">
+    <path d="M18 124c0-30 14-46 37-46s37 16 37 46Z" fill="#8fd3ff" stroke="#2b2b3a" stroke-width="4"/>
+    <circle cx="55" cy="46" r="28" fill="#ffd3b0" stroke="#2b2b3a" stroke-width="4"/>
+    <path d="M27 42c0-26 56-30 56 0-8-10-18-14-28-14s-20 4-28 14Z" fill="#6b4226" stroke="#2b2b3a" stroke-width="4" stroke-linejoin="round"/>
+    <circle cx="44" cy="50" r="3.5" fill="#2b2b3a"/><circle cx="66" cy="50" r="3.5" fill="#2b2b3a"/>
+    <path d="M44 63q11 8 22 0" fill="none" stroke="#2b2b3a" stroke-width="3.5" stroke-linecap="round"/>
+  </symbol>
+  <!-- Scammer -->
+  <symbol id="scammer" viewBox="0 0 110 130">
+    <path d="M18 124c0-30 14-46 37-46s37 16 37 46Z" fill="#555568" stroke="#2b2b3a" stroke-width="4"/>
+    <circle cx="55" cy="46" r="28" fill="#ffd3b0" stroke="#2b2b3a" stroke-width="4"/>
+    <path d="M24 44c2-30 60-30 62 0Z" fill="#2b2b3a" stroke="#2b2b3a" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M22 44h66" stroke="#2b2b3a" stroke-width="6" stroke-linecap="round"/>
+    <rect x="30" y="48" width="50" height="14" rx="5" fill="#2b2b3a"/><circle cx="43" cy="55" r="3" fill="#ffd95e"/><circle cx="67" cy="55" r="3" fill="#ffd95e"/>
+    <path d="M42 74q13-10 26 0" fill="none" stroke="#2b2b3a" stroke-width="3.5" stroke-linecap="round"/>
+  </symbol>
+  <!-- Router hub -->
+  <symbol id="router" viewBox="0 0 140 110">
+    <path d="M36 40 24 6M104 40 116 6" stroke="#2b2b3a" stroke-width="5" stroke-linecap="round"/>
+    <circle cx="24" cy="6" r="5" fill="#ffd95e" stroke="#2b2b3a" stroke-width="3"/><circle cx="116" cy="6" r="5" fill="#ffd95e" stroke="#2b2b3a" stroke-width="3"/>
+    <rect x="6" y="40" width="128" height="62" rx="16" fill="#8fd3ff" stroke="#2b2b3a" stroke-width="5"/>
+    <rect x="24" y="50" width="56" height="34" rx="6" fill="#2b2b3a"/>
+    <path d="m34 68 7 7 14-15" fill="none" stroke="#7be0c3" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M62 62h12M62 72h8" stroke="#7be0c3" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="98" cy="62" r="5" fill="#7be0c3" stroke="#2b2b3a" stroke-width="2.5"/><circle cx="114" cy="62" r="5" fill="#ffd95e" stroke="#2b2b3a" stroke-width="2.5"/><circle cx="98" cy="80" r="5" fill="#ff8f7a" stroke="#2b2b3a" stroke-width="2.5"/><circle cx="114" cy="80" r="5" fill="#fff" stroke="#2b2b3a" stroke-width="2.5"/>
+  </symbol>
+  <!-- Camera -->
+  <symbol id="camera" viewBox="0 0 140 110">
+    <path d="M70 70v28M44 100h52" stroke="#2b2b3a" stroke-width="6" stroke-linecap="round"/>
+    <rect x="8" y="14" width="124" height="58" rx="18" fill="#c9b6ff" stroke="#2b2b3a" stroke-width="5"/>
+    <circle cx="52" cy="43" r="22" fill="#fff" stroke="#2b2b3a" stroke-width="5"/><circle cx="52" cy="43" r="12" fill="#2b2b3a"/><circle cx="47" cy="38" r="4" fill="#fff"/>
+    <circle cx="104" cy="30" r="5" fill="#ff8f7a" stroke="#2b2b3a" stroke-width="2.5"/><path d="M88 54h30" stroke="#2b2b3a" stroke-width="4" stroke-linecap="round"/>
+  </symbol>
+  <!-- Detector -->
+  <symbol id="detector" viewBox="0 0 120 120">
+    <circle cx="60" cy="60" r="54" fill="#fff" stroke="#2b2b3a" stroke-width="5"/>
+    <circle cx="60" cy="60" r="38" fill="#ffeccb" stroke="#2b2b3a" stroke-width="3"/>
+    <path d="M60 28v8M60 84v8M28 60h8M84 60h8M37 37l6 6M77 77l6 6M83 37l-6 6M43 77l-6 6" stroke="#2b2b3a" stroke-width="3.5" stroke-linecap="round"/>
+    <circle cx="60" cy="60" r="12" fill="#35d07f" stroke="#2b2b3a" stroke-width="4"/>
+  </symbol>
+  <!-- Siren -->
+  <symbol id="siren" viewBox="0 0 130 120">
+    <path d="M32 100h66l8 14H24Z" fill="#555568" stroke="#2b2b3a" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M36 100V62a29 29 0 0 1 58 0v38Z" fill="#ff8f7a" stroke="#2b2b3a" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M48 96V64a17 17 0 0 1 12-16" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".8"/>
+    <path d="M65 8v14M24 18l8 10M106 18l-8 10M8 52l14 2M122 52l-14 2" stroke="#2b2b3a" stroke-width="5" stroke-linecap="round"/>
+  </symbol>
+  <!-- Portable GPS -->
+  <symbol id="portable" viewBox="0 0 80 130">
+    <rect x="10" y="6" width="60" height="118" rx="22" fill="#ffb3d1" stroke="#2b2b3a" stroke-width="5"/>
+    <circle cx="40" cy="22" r="5" fill="#fff" stroke="#2b2b3a" stroke-width="3"/>
+    <rect x="20" y="36" width="40" height="46" rx="8" fill="#fff" stroke="#2b2b3a" stroke-width="3"/>
+    <path d="M40 74c-10-10-12-16-12-21a12 12 0 0 1 24 0c0 5-2 11-12 21Z" fill="#ff8f7a" stroke="#2b2b3a" stroke-width="3"/><circle cx="40" cy="53" r="4" fill="#fff"/>
+    <circle cx="40" cy="104" r="11" fill="#ffd95e" stroke="#2b2b3a" stroke-width="4"/>
+  </symbol>
+  <!-- Server bank -->
+  <symbol id="server" viewBox="0 0 120 130">
+    <g stroke="#2b2b3a" stroke-width="5" stroke-linejoin="round">
+      <rect x="10" y="8" width="100" height="34" rx="9" fill="#7be0c3"/><rect x="10" y="48" width="100" height="34" rx="9" fill="#8fd3ff"/><rect x="10" y="88" width="100" height="34" rx="9" fill="#ffd95e"/>
+    </g>
+    <g fill="#2b2b3a"><circle cx="30" cy="25" r="5"/><circle cx="30" cy="65" r="5"/><circle cx="30" cy="105" r="5"/></g>
+    <path d="M52 25h42M52 65h42M52 105h42" stroke="#2b2b3a" stroke-width="5" stroke-linecap="round"/>
+  </symbol>
+  <!-- House -->
+  <symbol id="house" viewBox="0 0 140 120">
+    <path d="M14 56 70 8l56 48" fill="#ff8f7a" stroke="#2b2b3a" stroke-width="5" stroke-linejoin="round"/>
+    <rect x="24" y="54" width="92" height="60" fill="#fff3bd" stroke="#2b2b3a" stroke-width="5"/>
+    <rect x="58" y="76" width="24" height="38" rx="4" fill="#8fd3ff" stroke="#2b2b3a" stroke-width="4"/>
+    <rect x="32" y="66" width="20" height="20" fill="#fff" stroke="#2b2b3a" stroke-width="4"/><rect x="88" y="66" width="20" height="20" fill="#fff" stroke="#2b2b3a" stroke-width="4"/>
+    <path d="M70 46q-9-8-5-14 4-5 5 1 1-6 5-1 4 6-5 14Z" fill="#7be0c3" stroke="#2b2b3a" stroke-width="2.5" stroke-linejoin="round"/>
+  </symbol>
+  <!-- Kid -->
+  <symbol id="kid" viewBox="0 0 110 130">
+    <path d="M22 124c0-28 12-42 33-42s33 14 33 42Z" fill="#ffd95e" stroke="#2b2b3a" stroke-width="4"/>
+    <circle cx="55" cy="48" r="28" fill="#ffd3b0" stroke="#2b2b3a" stroke-width="4"/>
+    <path d="M27 44c4-30 52-30 56 0-10-8-18-10-28-10s-18 2-28 10Z" fill="#d45a2a" stroke="#2b2b3a" stroke-width="4" stroke-linejoin="round"/>
+    <circle cx="44" cy="52" r="3.5" fill="#2b2b3a"/><circle cx="66" cy="52" r="3.5" fill="#2b2b3a"/>
+    <path d="M44 64q11 10 22 0" fill="#fff" stroke="#2b2b3a" stroke-width="3.5" stroke-linecap="round"/>
+    <circle cx="38" cy="62" r="4" fill="#ff8f7a" opacity=".6"/><circle cx="72" cy="62" r="4" fill="#ff8f7a" opacity=".6"/>
+  </symbol>
+  <!-- School -->
+  <symbol id="school" viewBox="0 0 140 120">
+    <path d="M70 6 6 40h128Z" fill="#c9b6ff" stroke="#2b2b3a" stroke-width="5" stroke-linejoin="round"/>
+    <rect x="14" y="40" width="112" height="72" fill="#fff3bd" stroke="#2b2b3a" stroke-width="5"/>
+    <rect x="56" y="70" width="28" height="42" rx="4" fill="#8fd3ff" stroke="#2b2b3a" stroke-width="4"/>
+    <g fill="#fff" stroke="#2b2b3a" stroke-width="4"><rect x="24" y="54" width="22" height="22"/><rect x="94" y="54" width="22" height="22"/></g>
+    <path d="M70 6V-2" stroke="#2b2b3a" stroke-width="4"/><path d="M70 -2h18l-6 6 6 6H70" fill="#ff8f7a" stroke="#2b2b3a" stroke-width="3" transform="translate(0,6)"/>
+  </symbol>
+  <!-- Lock shield -->
+  <symbol id="lock" viewBox="0 0 100 120">
+    <path d="M30 52V34a20 20 0 0 1 40 0v18" fill="none" stroke="#2b2b3a" stroke-width="9" stroke-linecap="round"/>
+    <rect x="12" y="50" width="76" height="62" rx="14" fill="#ffd95e" stroke="#2b2b3a" stroke-width="5"/>
+    <circle cx="50" cy="76" r="8" fill="#2b2b3a"/><path d="M50 80v16" stroke="#2b2b3a" stroke-width="6" stroke-linecap="round"/>
+  </symbol>
+  <!-- Robot assistant -->
+  <symbol id="robot" viewBox="0 0 100 110">
+    <path d="M50 6v14" stroke="#2b2b3a" stroke-width="5" stroke-linecap="round"/><circle cx="50" cy="6" r="6" fill="#ff8f7a" stroke="#2b2b3a" stroke-width="3"/>
+    <rect x="12" y="20" width="76" height="62" rx="20" fill="#fff" stroke="#2b2b3a" stroke-width="5"/>
+    <circle cx="36" cy="48" r="10" fill="#8fd3ff" stroke="#2b2b3a" stroke-width="3.5"/><circle cx="64" cy="48" r="10" fill="#8fd3ff" stroke="#2b2b3a" stroke-width="3.5"/>
+    <circle cx="38" cy="50" r="4" fill="#2b2b3a"/><circle cx="66" cy="50" r="4" fill="#2b2b3a"/>
+    <path d="M36 68q14 10 28 0" fill="none" stroke="#2b2b3a" stroke-width="4" stroke-linecap="round"/>
+    <path d="M30 86h40v16H30Z" fill="#7be0c3" stroke="#2b2b3a" stroke-width="4" stroke-linejoin="round"/>
+  </symbol>
+  <!-- Doodle bits -->
+  <symbol id="star" viewBox="0 0 50 50"><path d="m25 3 6 15 16 1-12 11 4 16-14-9-14 9 4-16L3 19l16-1Z" fill="#ffd95e" stroke="#2b2b3a" stroke-width="3" stroke-linejoin="round"/></symbol>
+  <symbol id="heart" viewBox="0 0 50 46"><path d="M25 43C6 29 2 18 7 10c5-7 14-5 18 2 4-7 13-9 18-2 5 8 1 19-18 33Z" fill="#ffb3d1" stroke="#2b2b3a" stroke-width="3" stroke-linejoin="round"/></symbol>
+  <symbol id="cloud" viewBox="0 0 120 60"><path d="M26 54a18 18 0 0 1 2-36 26 26 0 0 1 50-4 20 20 0 0 1 20 40Z" fill="#fff" stroke="#2b2b3a" stroke-width="3.5" stroke-linejoin="round"/></symbol>
+  <symbol id="squiggle" viewBox="0 0 120 30"><path d="M4 18q10-18 20 0t20 0 20 0 20 0 20 0 12-6" fill="none" stroke="#2b2b3a" stroke-width="4" stroke-linecap="round"/></symbol>
+  <symbol id="spark" viewBox="0 0 40 40"><path d="M20 2v36M2 20h36M7 7l26 26M33 7 7 33" stroke="#2b2b3a" stroke-width="3.5" stroke-linecap="round"/></symbol>
+</defs>
+</svg>
+
+<div class="concept-banner" role="note">🎨 Student concept project – not a real product for sale.</div>
+
+<!-- ============ NAV ============ -->
+<nav aria-label="Main navigation">
+  <div class="wrap nav-inner">
+    <a class="logo" href="#home" aria-label="HPSG home"><svg role="img" aria-label="HPSG shield logo" viewBox="0 0 64 72"><use href="#logo"/></svg>HPSG</a>
+    <button id="menuBtn" class="btn btn-sun btn-small" aria-expanded="false" aria-controls="navLinks">☰ Menu</button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#problem">Problem</a></li>
+      <li><a href="#how">How It Works</a></li>
+      <li><a href="#products">Products</a></li>
+      <li><a href="#packages">Packages</a></li>
+      <li><a href="#modes">Modes</a></li>
+      <li><a href="#devices">Devices</a></li>
+      <li><a href="#privacy">Privacy</a></li>
+      <li><a href="#roadmap">Roadmap</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#feedback">Feedback</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main id="main">
+
+<!-- ============ 1. HERO ============ -->
+<header class="hero" id="home">
+  <!-- floating background doodles -->
+  <svg class="deco bob" style="left:3%;top:30px;width:110px" viewBox="0 0 120 60" aria-hidden="true"><use href="#cloud"/></svg>
+  <svg class="deco bob" style="right:30%;top:14px;width:90px;animation-delay:1s" viewBox="0 0 120 60" aria-hidden="true"><use href="#cloud"/></svg>
+  <svg class="deco bob" style="left:46%;bottom:50px;width:44px;animation-delay:.5s" viewBox="0 0 50 50" aria-hidden="true"><use href="#star"/></svg>
+  <svg class="deco" style="left:6%;bottom:50px;width:120px" viewBox="0 0 120 30" aria-hidden="true"><use href="#squiggle"/></svg>
+
+  <div class="wrap hero-grid">
+    <div>
+      <p class="eyebrow">A student invention ✏️</p>
+      <h1>HPSG – Home Protective Safe Guard</h1>
+      <p class="tagline"><mark>Protection online and at home.</mark> No subscription.</p>
+      <p class="lead">Meet the friendly safety hub that spots scam calls, texts, and emails, and keeps an eye on your home too. Made to help grandparents and the whole family feel safe.</p>
+      <div class="btn-row">
+        <a class="btn btn-mint" href="#packages">See Packages</a>
+        <a class="btn btn-white" href="#how">How It Works</a>
+      </div>
+    </div>
+    <div class="hero-art">
+      <div class="speech">Hi, I’m Shieldy! 👋</div>
+      <svg class="doodle bob" viewBox="0 0 120 140" role="img" aria-label="Shieldy, the smiling shield mascot of HPSG"><use href="#mascot"/></svg>
+      <svg class="deco bob" style="right:0;bottom:30px;width:56px;animation-delay:.8s" viewBox="0 0 50 46" aria-hidden="true"><use href="#heart"/></svg>
+    </div>
+  </div>
+</header>
+
+<!-- Demo stats strip -->
+<div class="wrap">
+  <div class="stats" aria-label="Demo statistics">
+    <div class="stat"><b id="cScams">0</b>scams blocked today*</div>
+    <div class="stat"><b>12,480</b>demo families protected*</div>
+    <div class="stat"><b>$0</b>monthly fees</div>
+    <div class="stat"><b>4.9 ★</b>pretend rating*</div>
+  </div>
+  <p class="fine" style="text-align:center;margin-top:12px">*Made-up numbers for this concept demo.</p>
+</div>
+
+<!-- ============ 2. PROBLEM ============ -->
+<section id="problem">
+  <svg class="deco bob" style="right:4%;top:30px;width:50px" viewBox="0 0 40 40" aria-hidden="true"><use href="#spark"/></svg>
+  <div class="wrap">
+    <p class="eyebrow">The Problem</p>
+    <h2>Scammers pick on the people we love</h2>
+    <p class="lead">Scammers know many older adults are polite and trusting. They use fake calls, texts, and emails to rush people into sending money. Here are three they love:</p>
+    <div class="grid" style="margin:40px 0 20px">
+      <div class="scam-msg tint-pink"><span class="stamp">SCAM!</span><small>📞 Fake grandchild emergency</small>“Grandma, I’m in trouble and need money fast. Please don’t tell Mom!”</div>
+      <div class="scam-msg tint-sun"><span class="stamp">SCAM!</span><small>🏛️ Fake IRS call</small>“You owe back taxes. Pay today or you will be arrested.”</div>
+      <div class="scam-msg tint-sky"><span class="stamp">SCAM!</span><small>🎁 Gift-card request</small>“Buy four gift cards and read me the numbers on the back.”</div>
+    </div>
+    <div class="stat-note">
+      <b>📊 Demo statistic:</b> In our made-up survey of 1,000 imaginary grandparents, 7 out of 10 got a suspicious call last month.
+      <br><span class="fine">(Concept project. Source: invented for the demo. A real version would cite a real source.)</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3. HOW IT WORKS ============ -->
+<section id="how" class="alt">
+  <div class="wrap">
+    <p class="eyebrow">How It Works</p>
+    <h2>One scam call, four steps</h2>
+    <ol class="steps">
+      <li>
+        <div class="pic"><svg class="doodle" viewBox="0 0 110 130" role="img" aria-label="Cartoon grandma on the phone"><use href="#grandma"/></svg></div>
+        <h3>The call</h3><p>Grandma gets a call saying her grandson needs money right away.</p>
+      </li>
+      <li>
+        <div class="pic"><svg class="doodle" viewBox="0 0 140 110" role="img" aria-label="HPSG Router Hub"><use href="#router"/></svg></div>
+        <h3>Detection</h3><p>HPSG spots scam warning signs like “urgent” and “gift card”.</p>
+      </li>
+      <li>
+        <div class="pic"><svg class="doodle" viewBox="0 0 90 140" role="img" aria-label="Phone showing a scam warning"><use href="#phone-scam"/></svg></div>
+        <h3>Warning</h3><p>It warns her on screen and texts a family member.</p>
+      </li>
+      <li>
+        <div class="pic"><svg class="doodle" viewBox="0 0 120 140" role="img" aria-label="Happy Shieldy mascot"><use href="#mascot"/></svg></div>
+        <h3>Safe!</h3><p>The family confirms it’s a scam and no money is lost. 🎉</p>
+      </li>
+    </ol>
+
+    <div class="checker">
+      <div>
+        <h3>🕵️ Try the Scam Checker</h3>
+        <p>Paste a message and Shieldy will look for common scam warning signs.</p>
+        <label for="scamInput"><b>Message to check:</b></label>
+        <textarea id="scamInput" placeholder="Example: URGENT! Buy a gift card and don't tell anyone."></textarea>
+        <div class="chips" aria-label="Example messages">
+          <button class="btn btn-white btn-small" type="button" data-ex="URGENT: Your account is locked. Act now and send a gift card code to the IRS.">Try a scammy one</button>
+          <button class="btn btn-white btn-small" type="button" data-ex="Hi Grandma, I'll be over for dinner at 6. Want me to bring dessert?">Try a safe one</button>
+          <button class="btn btn-white btn-small" type="button" data-ex="It's me, your grandson. I need bail money. Wire money and don't tell anyone!">Try a grandchild one</button>
+        </div>
+        <button class="btn btn-mint" id="scamBtn" type="button">Check this message</button>
+        <div class="result" id="scamResult" role="status" aria-live="polite" hidden></div>
+      </div>
+      <div class="mascot-side"><svg class="doodle bob" viewBox="0 0 120 140" aria-hidden="true"><use href="#mascot"/></svg></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 4. PRODUCTS ============ -->
+<section id="products">
+  <div class="wrap">
+    <p class="eyebrow">Products</p>
+    <h2>Meet the HPSG family of gadgets</h2>
+    <div class="grid">
+
+      <article class="card tint-sky">
+        <div class="pic"><svg class="doodle" viewBox="0 0 140 110" role="img" aria-label="Cartoon HPSG Router Hub with small screen"><use href="#router"/></svg></div>
+        <h3>HPSG Router Hub</h3>
+        <p>The main unit. Connects to your home Wi-Fi and has a small screen that shows if everything is safe.</p>
+        <ul class="spec"><li>Wi-Fi 6 speeds</li><li>3.5-inch touch screen</li><li>Works with up to 40 devices</li></ul>
+      </article>
+
+      <article class="card tint-lav">
+        <div class="pic"><svg class="doodle" viewBox="0 0 140 110" role="img" aria-label="Cartoon smart camera"><use href="#camera"/></svg></div>
+        <h3>Smart Cameras</h3>
+        <p>Check your doors and rooms from your phone. Everyone in the family gets alerts.</p>
+        <ul class="spec"><li>1080p picture</li><li>Night vision</li><li>Wire-free in 2 minutes</li></ul>
+      </article>
+
+      <article class="card tint-mint">
+        <div class="pic"><svg class="doodle" viewBox="0 0 120 120" role="img" aria-label="Cartoon smoke and gas detector"><use href="#detector"/></svg></div>
+        <h3>Smoke &amp; Gas Detectors</h3>
+        <p>The light glows <b>green</b> when you’re safe. In danger it turns <b style="color:var(--warn)">red</b> with a loud alarm.</p>
+        <div class="detector-demo">
+          <div class="led" id="led" role="img" aria-label="Detector light: green, safe"></div>
+          <button class="btn btn-white btn-small" id="ledBtn" type="button">Show danger demo</button>
+        </div>
+        <p id="ledText" class="fine" role="status" aria-live="polite" style="margin:0">Status: Safe (silent demo)</p>
+      </article>
+
+      <article class="card tint-coral">
+        <div class="pic"><svg class="doodle" viewBox="0 0 130 120" role="img" aria-label="Cartoon alarm siren"><use href="#siren"/></svg></div>
+        <h3>Safety Alert System</h3>
+        <p>A deterrent: a very loud siren plus flashing strobe lights that scare off intruders and alert everyone in the house.</p>
+        <div class="strobe" aria-hidden="true"></div>
+        <ul class="spec"><li>120-decibel siren</li><li>Strobe lights</li></ul>
+      </article>
+
+      <article class="card tint-pink">
+        <div class="pic"><svg class="doodle" viewBox="0 0 80 130" style="max-width:80px;margin:auto" role="img" aria-label="Cartoon pocket-sized Portable HPSG with GPS"><use href="#portable"/></svg></div>
+        <h3>Portable HPSG</h3>
+        <p>A pocket device with GPS so family can always find each other.</p>
+        <p class="price">$25</p>
+      </article>
+
+      <article class="card tint-sun">
+        <div class="pic"><svg class="doodle" viewBox="0 0 120 130" role="img" aria-label="Cartoon stack of server storage"><use href="#server"/></svg></div>
+        <h3>Server Bank</h3>
+        <p>24 TB of storage for large homes and businesses, to keep camera video safe.</p>
+        <p class="price">$3,200</p>
+      </article>
+
+    </div>
+    <p style="margin-top:30px"><b>🚑 In an emergency:</b> HPSG alerts the owner first. If the owner confirms, or doesn’t respond, it contacts emergency services.</p>
+  </div>
+</section>
+
+<!-- ============ 5. PACKAGES ============ -->
+<section id="packages" class="alt">
+  <div class="wrap">
+    <p class="eyebrow">Packages</p>
+    <h2>Pick the protection that fits</h2>
+    <div class="table-scroll">
+      <table class="pkg">
+        <caption class="sr">HPSG package comparison</caption>
+        <thead>
+          <tr>
+            <th scope="col">What’s included</th>
+            <th scope="col">Basic<span class="amount">$2,200</span></th>
+            <th scope="col" class="pop"><span class="badge">⭐ Most Popular</span><br>Bulk Protection<span class="amount">$7,500</span></th>
+            <th scope="col">Wide<br><small>(multiple locations)</small><span class="amount">$15,000</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">📡 Router Hubs</th><td>1</td><td class="pop">1</td><td>5</td></tr>
+          <tr><th scope="row">📹 Cameras</th><td>5–6</td><td class="pop">8–12</td><td>20–60</td></tr>
+          <tr><th scope="row">🗄️ Server Banks</th><td>–</td><td class="pop">1 (10 TB)</td><td>6 (24 TB each)</td></tr>
+          <tr><th scope="row">🔥 Smoke detectors</th><td>2</td><td class="pop">5 smoke/gas</td><td>20</td></tr>
+          <tr><th scope="row">💨 Gas detectors</th><td>2</td><td class="pop">(in the 5)</td><td>15</td></tr>
+          <tr><th scope="row">🚨 Safety Alert Systems</th><td>–</td><td class="pop">1</td><td>3</td></tr>
+          <tr><th scope="row">📍 Portable HPSGs</th><td>–</td><td class="pop">–</td><td>10</td></tr>
+          <tr><th scope="row">🛠️ Setup help</th><td>Video guide</td><td class="pop">Phone call</td><td>Visit (pretend)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p><b>No monthly fees. One optional yearly update.</b></p>
+  </div>
+</section>
+
+<!-- ============ 6. MODES ============ -->
+<section id="modes">
+  <div class="wrap">
+    <p class="eyebrow">Modes</p>
+    <h2>One hub, three ways to protect</h2>
+    <div class="grid">
+      <article class="card tint-mint"><div class="pic"><svg class="doodle" viewBox="0 0 100 120" role="img" aria-label="Cartoon padlock"><use href="#lock"/></svg></div><h3>Safe Mode</h3><p>Extra-strong tech security for people who want maximum protection.</p></article>
+      <article class="card tint-sun"><div class="pic"><svg class="doodle" viewBox="0 0 110 130" role="img" aria-label="Cartoon smiling child"><use href="#kid"/></svg></div><h3>Children Mode</h3><p>Kid-safe settings and family location sharing that parents control.</p></article>
+      <article class="card tint-lav"><div class="pic"><svg class="doodle" viewBox="0 0 140 120" role="img" aria-label="Cartoon school building"><use href="#school"/></svg></div><h3>School Mode</h3><p>Protection designed for schools and classrooms.</p></article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 7. DEVICES ============ -->
+<section id="devices" class="alt">
+  <div class="wrap">
+    <p class="eyebrow">Compatibility</p>
+    <h2>Works with your devices</h2>
+    <p><span class="mark yes" style="display:inline-grid" aria-hidden="true">✓</span> works &nbsp;
+       <span class="mark some" style="display:inline-grid" aria-hidden="true">~</span> some models &nbsp;
+       <span class="mark no" style="display:inline-grid" aria-hidden="true">✗</span> not supported</p>
+    <ul class="compat" id="compatGrid"></ul>
+    <div class="assistant-bubble">
+      <svg viewBox="0 0 100 110" role="img" aria-label="Cartoon robot assistant"><use href="#robot"/></svg>
+      <p style="margin:0"><b>Connect a trusted AI assistant to give your HPSG a personality.</b></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 8. PRIVACY ============ -->
+<section id="privacy">
+  <div class="wrap">
+    <p class="eyebrow">Privacy Promise</p>
+    <h2>Your home stays your business</h2>
+    <div class="grid">
+      <article class="card tint-sun"><h3>🍪 No cookies</h3><p>HPSG doesn’t track you. This very website uses zero cookies.</p></article>
+      <article class="card tint-pink"><h3>🚫 No selling data</h3><p>Your data is never sold to third parties. Ever.</p></article>
+      <article class="card tint-sky"><h3>🔑 16-digit security key</h3><p>Only you hold the key to your hub, like <code>4F9K-27QX-81LM-ZT03</code> (example).</p></article>
+      <article class="card tint-mint"><h3>🧱 Multiple firewalls</h3><p>Layers of protection between the internet and your home.</p></article>
+    </div>
+    <p style="margin-top:28px">Data is shared with authorities only when legally required or in an emergency.</p>
+  </div>
+</section>
+
+<!-- ============ 9. ROADMAP ============ -->
+<section id="roadmap" class="alt">
+  <div class="wrap">
+    <p class="eyebrow">Updates Roadmap</p>
+    <h2>Where HPSG is headed</h2>
+    <p class="fine">Made-up plans for the concept. Scroll sideways → (use arrow keys too)</p>
+    <ol class="timeline" tabindex="0" aria-label="Version timeline, scrollable">
+      <li><span class="ver">v0.1</span>Basic scam-phrase warnings on the Hub screen.<small>Spring (pretend)</small></li>
+      <li><span class="ver">v0.2</span>Text alerts to a trusted family member.<small>Summer</small></li>
+      <li><span class="ver">v0.4</span>Camera support with phone viewing.<small>Fall</small></li>
+      <li><span class="ver">v0.5</span>Smoke and gas detector linking.<small>Winter</small></li>
+      <li><span class="ver">v0.6</span>Emergency flow: owner confirms, then services are contacted.<small>Next spring</small></li>
+      <li><span class="ver">v1.0</span>Big launch with Safe, Children, and School modes! 🎉<small>Next summer</small></li>
+      <li><span class="ver">v1.2</span>Portable HPSG with family GPS sharing.<small>Next fall</small></li>
+      <li><span class="ver">v1.3</span>Trusted AI assistant “personality” option.<small>Next winter</small></li>
+      <li><span class="ver">v1.4</span>Multi-location dashboard for the Wide package.<small>Year 3</small></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ 10. ABOUT ============ -->
+<section id="about">
+  <div class="wrap">
+    <p class="eyebrow">Our Mission</p>
+    <h2>Safety that everyone can afford</h2>
+    <div class="grid" style="align-items:center">
+      <div>
+        <p class="lead">HPSG wants to make safety affordable and accessible worldwide. A future goal is to help communities in Africa, South America, and elsewhere get internet access and computers.</p>
+        <p><b>Dream partners we’d love to work with:</b> internet providers and computer companies. (No company is a sponsor or partner today.)</p>
+        <p>Created by <b>Caleb</b>, a student innovator. 💡</p>
+      </div>
+      <div><svg class="doodle" viewBox="0 0 140 120" role="img" aria-label="Cartoon house with a plant, protected by HPSG"><use href="#house"/></svg></div>
+    </div>
+
+    <h3 style="margin-top:56px">What families (might) say</h3>
+    <p class="fine">Pretend quotes from imaginary people, just for the demo.</p>
+    <div class="grid">
+      <div class="card tint-pink"><svg class="avatar" viewBox="0 0 120 130" aria-hidden="true"><use href="#grandma"/></svg><b>Dorothy, 74</b><p class="quote">“It told me a call was a scam before I even picked up. My grandson was so proud.”</p></div>
+      <div class="card tint-sky"><svg class="avatar" viewBox="0 0 110 130" aria-hidden="true"><use href="#grandson"/></svg><b>Marcus, 17</b><p class="quote">“I got a text asking if grandma was okay. Turned out to be a fake call. Saved $800!”</p></div>
+      <div class="card tint-sun"><svg class="avatar" viewBox="0 0 110 130" aria-hidden="true"><use href="#kid"/></svg><b>Priya, 11</b><p class="quote">“The green light means safe. I like checking it every morning.”</p></div>
+    </div>
+
+    <h3 style="margin-top:56px">Questions people ask</h3>
+    <details><summary>Do I have to pay every month?</summary><p>No! You pay once for your package. There is one optional yearly update.</p></details>
+    <details><summary>What if I have no internet for a day?</summary><p>The detectors and siren still work on their own battery (about 10 hours in our pretend spec).</p></details>
+    <details><summary>Who sees my camera videos?</summary><p>Only you and the family members you choose. Videos stay on your Server Bank.</p></details>
+    <details><summary>Is HPSG a real product?</summary><p>Not yet! It is a student concept for a youth pitch competition.</p></details>
+  </div>
+</section>
+
+<!-- ============ 11. FEEDBACK ============ -->
+<section id="feedback" class="alt">
+  <div class="wrap">
+    <p class="eyebrow">Feedback</p>
+    <h2>Tell Caleb what you think</h2>
+    <form class="feedback" id="feedbackForm">
+      <fieldset>
+        <legend>Rating (1–5 stars)</legend>
+        <div class="stars">
+          <input type="radio" name="rating" id="s5" value="5"><label for="s5"><span aria-hidden="true">★</span><span class="sr">5 stars</span></label>
+          <input type="radio" name="rating" id="s4" value="4"><label for="s4"><span aria-hidden="true">★</span><span class="sr">4 stars</span></label>
+          <input type="radio" name="rating" id="s3" value="3"><label for="s3"><span aria-hidden="true">★</span><span class="sr">3 stars</span></label>
+          <input type="radio" name="rating" id="s2" value="2"><label for="s2"><span aria-hidden="true">★</span><span class="sr">2 stars</span></label>
+          <input type="radio" name="rating" id="s1" value="1"><label for="s1"><span aria-hidden="true">★</span><span class="sr">1 star</span></label>
+        </div>
+      </fieldset>
+      <label for="fbText"><b>How was your experience? What should we do to improve?</b></label>
+      <textarea id="fbText" name="comments" style="margin:10px 0 18px"></textarea>
+      <button class="btn btn-mint" type="submit">Submit</button>
+    </form>
+    <div class="thanks" id="thanks" role="status" aria-live="polite" hidden>
+      <svg viewBox="0 0 120 140" aria-hidden="true"><use href="#mascot"/></svg>
+      <div><h3>Thank you!</h3><p style="margin:0">Shieldy and Caleb read every idea. (This is a demo, so nothing was actually sent anywhere.)</p></div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============ 12. FOOTER ============ -->
+<footer>
+  <div class="wrap foot-grid">
+    <svg viewBox="0 0 120 140" role="img" aria-label="Shieldy mascot"><use href="#mascot"/></svg>
+    <div>
+      <p><b>Help line:</b> (555) 010-0142 <small>(fictional)</small></p>
+      <p><b>Location:</b> Worcester, Massachusetts</p>
+      <p style="margin:0">HPSG is a student concept project created for a youth pitch competition. Prices, products, and partners are imaginary.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* =====================================================
+   JAVASCRIPT  (no libraries, no cookies, no tracking)
+   ===================================================== */
+
+/* Mobile menu */
+const menuBtn = document.getElementById('menuBtn');
+const navLinks = document.getElementById('navLinks');
+menuBtn.addEventListener('click', () => {
+  menuBtn.setAttribute('aria-expanded', navLinks.classList.toggle('open'));
+});
+navLinks.addEventListener('click', e => {
+  if (e.target.tagName === 'A') { navLinks.classList.remove('open'); menuBtn.setAttribute('aria-expanded', 'false'); }
+});
+
+/* Fake "scams blocked today" counter that slowly ticks up */
+let scams = 1284;
+const cScams = document.getElementById('cScams');
+cScams.textContent = scams.toLocaleString();
+setInterval(() => { scams += Math.floor(Math.random() * 3); cScams.textContent = scams.toLocaleString(); }, 3000);
+
+/* ---- Scam Checker: edit this list to add phrases ---- */
+const SCAM_PHRASES = ['gift card', 'wire money', 'urgent', 'act now', 'irs',
+  'your account is locked', "don't tell anyone", 'bail'];
+
+document.querySelectorAll('[data-ex]').forEach(b =>
+  b.addEventListener('click', () => { document.getElementById('scamInput').value = b.dataset.ex; }));
+
+document.getElementById('scamBtn').addEventListener('click', () => {
+  const text = document.getElementById('scamInput').value.toLowerCase().replace(/[’‘]/g, "'");
+  const box = document.getElementById('scamResult');
+  const found = SCAM_PHRASES.filter(p =>
+    new RegExp('\\b' + p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b').test(text));
+  box.hidden = false;
+  if (!text.trim()) {
+    box.className = 'result'; box.textContent = 'Please paste a message first.';
+  } else if (found.length) {
+    box.className = 'result bad';
+    box.innerHTML = '<span aria-hidden="true">⚠️</span> Possible scam<br>Warning phrases found:<ul>' +
+      found.map(p => '<li>“' + p + '”</li>').join('') + '</ul>' +
+      '<p class="note">Do not send money or share codes. Call a family member you trust. This is a simple demo, not a real scam detector.</p>';
+  } else {
+    box.className = 'result good';
+    box.innerHTML = '<span aria-hidden="true">✅</span> No common scam signs found' +
+      '<p class="note">This is a simple demo that only checks a few phrases. If something feels wrong, still ask someone you trust.</p>';
+  }
+});
+
+/* ---- Detector demo (silent) ---- */
+const led = document.getElementById('led'), ledBtn = document.getElementById('ledBtn'), ledText = document.getElementById('ledText');
+ledBtn.addEventListener('click', () => {
+  const danger = led.classList.toggle('danger');
+  led.setAttribute('aria-label', danger ? 'Detector light: red, danger' : 'Detector light: green, safe');
+  ledText.textContent = danger ? 'Status: DANGER – red light and loud alarm (silent demo)' : 'Status: Safe (silent demo)';
+  ledText.style.color = danger ? 'var(--warn)' : '';
+  ledText.style.fontWeight = danger ? '700' : '';
+  ledBtn.textContent = danger ? 'Back to safe' : 'Show danger demo';
+});
+
+/* ---- Device compatibility list: 'yes', 'some', 'no' ---- */
+const DEVICES = [
+  ['HP','yes'],['Dell','some'],['Mac','some'],['Windows 10 and newer','yes'],['Windows older than 10','no'],
+  ['Linux','some'],['Most tablets','yes'],['iPhone SE and newer','yes'],['Samsung phones','yes'],
+  ['Google Pixel','yes'],['Chromebooks','yes'],['Samsung Watch','yes'],['Apple Watch','some'],['Bluetooth-connected cars','yes']
+];
+const MARKS = { yes: ['✓','works'], some: ['~','works on some models'], no: ['✗','not supported'] };
+document.getElementById('compatGrid').innerHTML = DEVICES.map(([n, s]) =>
+  `<li><span>${n}</span><span class="mark ${s}" role="img" aria-label="${MARKS[s][1]}">${MARKS[s][0]}</span></li>`).join('');
+
+/* ---- Feedback form (nothing is sent anywhere) ---- */
+document.getElementById('feedbackForm').addEventListener('submit', e => {
+  e.preventDefault();
+  e.target.hidden = true;
+  document.getElementById('thanks').hidden = false;
+});
+</script>
+</body>
+</html>
