@@ -9,22 +9,22 @@
 <style>
 /* =====================================================
    1. THEME  (change these colors to restyle everything)
+   Blue shades from very light to deep. Red is ONLY for warnings.
    ===================================================== */
 :root {
-  --paper:  #fff6e5;   /* page background (warm paper) */
-  --paper2: #ffeccb;   /* alternate sections */
-  --ink:    #2b2b3a;   /* text + all the doodle outlines */
-  --mint:   #7be0c3;
-  --sky:    #8fd3ff;
-  --sun:    #ffd95e;
-  --coral:  #ff8f7a;
-  --lav:    #c9b6ff;
-  --pink:   #ffb3d1;
-  --warn:   #d62839;   /* red is ONLY for warnings */
-  --warnbg: #ffe1e3;
-  --okbg:   #d9f8ec;
-  --head: "Segoe Print","Bradley Hand","Chalkboard SE","Comic Sans MS",cursive;
-  --body: "Trebuchet MS",Verdana,"Segoe UI",sans-serif;
+  --navy:   #0b2a5b;   /* text, outlines, footer */
+  --deep:   #123f8c;   /* deep blue */
+  --blue:   #2f6fe0;   /* main accent */
+  --mid:    #4aa8ff;
+  --sky:    #a9d8ff;
+  --light:  #e4f2ff;
+  --pale:   #f4f9ff;   /* page background */
+  --white:  #ffffff;
+  --warn:   #d62839;
+  --warnbg: #ffe5e8;
+  --okbg:   #dff6ea;
+  --font: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --shadow: 0 10px 30px rgba(18, 63, 140, .14);
 }
 
 /* =====================================================
@@ -32,80 +32,54 @@
    ===================================================== */
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; scroll-padding-top: 90px; }
-body {
-  margin: 0; font-family: var(--body); font-size: 1.15rem; line-height: 1.65;
-  color: var(--ink); background: var(--paper);
-  /* subtle dotted-notebook background */
-  background-image: radial-gradient(#e9d5ac 1.4px, transparent 1.4px);
-  background-size: 26px 26px;
-  overflow-x: hidden;
-}
-h1,h2,h3 { font-family: var(--head); line-height: 1.15; margin: 0 0 .5em; }
-h1 { font-size: clamp(2.3rem, 6vw, 3.9rem); }
-h2 { font-size: clamp(1.9rem, 4.5vw, 2.8rem); }
-h3 { font-size: 1.35rem; }
+body { margin: 0; font-family: var(--font); font-size: 1.15rem; line-height: 1.65; color: var(--navy); background: var(--pale); overflow-x: hidden; }
+h1,h2,h3 { line-height: 1.12; margin: 0 0 .5em; font-weight: 800; letter-spacing: -.02em; }
+h1 { font-size: clamp(2.4rem, 6vw, 4rem); }
+h2 { font-size: clamp(1.9rem, 4.5vw, 2.7rem); }
+h3 { font-size: 1.3rem; letter-spacing: -.01em; }
 p { margin: 0 0 1em; }
-a { color: var(--ink); }
+a { color: var(--blue); }
 .wrap { max-width: 1120px; margin: 0 auto; padding: 0 20px; position: relative; }
-section { padding: 80px 0; position: relative; }
-section.alt { background: var(--paper2); }
-.eyebrow {
-  display: inline-block; font-family: var(--head); background: var(--sun); border: 2.5px solid var(--ink);
-  padding: 2px 16px; border-radius: 999px; transform: rotate(-2deg); font-weight: 700; margin-bottom: 14px;
-}
+section { padding: 84px 0; }
+section.alt { background: var(--light); }
+.eyebrow { display: inline-block; font-weight: 800; font-size: .85rem; letter-spacing: .12em; text-transform: uppercase; color: var(--blue); background: var(--light); padding: 4px 14px; border-radius: 999px; margin-bottom: 14px; }
+section.alt .eyebrow { background: var(--white); }
 .lead { font-size: 1.25rem; max-width: 760px; }
 .fine { font-size: 1rem; }
-a:focus-visible, button:focus-visible, textarea:focus-visible, input:focus-visible, summary:focus-visible, .timeline:focus-visible {
-  outline: 4px solid var(--warn); outline-offset: 3px;
-}
-.skip { position: absolute; left: -999px; top: 0; background: var(--sun); padding: 10px 16px; z-index: 100; border: 2.5px solid var(--ink); }
+a:focus-visible, button:focus-visible, textarea:focus-visible, input:focus-visible, summary:focus-visible, .timeline:focus-visible { outline: 4px solid var(--blue); outline-offset: 3px; }
+.skip { position: absolute; left: -999px; top: 0; background: var(--white); padding: 10px 16px; z-index: 100; }
 .skip:focus { left: 10px; top: 10px; }
-
-/* Doodle SVG helper */
 .doodle { display: block; width: 100%; height: auto; }
-.deco { position: absolute; pointer-events: none; z-index: 0; }
-.bob { animation: bob 3.5s ease-in-out infinite; }
-@keyframes bob { 50% { transform: translateY(-10px) rotate(2deg); } }
+.bob { animation: bob 4s ease-in-out infinite; }
+@keyframes bob { 50% { transform: translateY(-8px); } }
 
-/* Chunky sticker buttons */
-.btn {
-  display: inline-block; font-family: var(--head); font-weight: 700; font-size: 1.15rem; cursor: pointer;
-  padding: 12px 28px; border: 3px solid var(--ink); border-radius: 16px; text-decoration: none; color: var(--ink);
-  box-shadow: 5px 5px 0 var(--ink); transition: transform .12s, box-shadow .12s;
-}
-.btn:hover { transform: translate(2px,2px); box-shadow: 3px 3px 0 var(--ink); }
-.btn:active { transform: translate(5px,5px); box-shadow: 0 0 0 var(--ink); }
-.btn-mint { background: var(--mint); } .btn-sun { background: var(--sun); } .btn-white { background: #fff; }
-.btn-small { font-size: .95rem; padding: 6px 16px; box-shadow: 3px 3px 0 var(--ink); }
+/* Buttons */
+.btn { display: inline-block; font: inherit; font-weight: 700; cursor: pointer; padding: 13px 28px; border: 2px solid transparent; border-radius: 999px; text-decoration: none; transition: transform .15s, box-shadow .15s; }
+.btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(18,63,140,.25); }
+.btn-mint  { background: linear-gradient(135deg, var(--blue), var(--deep)); color: #fff; }   /* main button */
+.btn-sun   { background: var(--light); color: var(--navy); }
+.btn-white { background: #fff; color: var(--deep); border-color: var(--sky); }
+.btn-small { font-size: .95rem; padding: 7px 16px; }
 
-/* Sticker cards */
-.grid { display: grid; gap: 28px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
-.card {
-  background: #fff; border: 3px solid var(--ink); border-radius: 22px; padding: 24px;
-  box-shadow: 7px 7px 0 var(--ink); position: relative; transition: transform .2s;
-}
-.grid .card:nth-child(odd)  { transform: rotate(-.8deg); }
-.grid .card:nth-child(even) { transform: rotate(.8deg); }
-.card:hover { transform: rotate(0) translateY(-4px) !important; }
-.card .pic { width: 130px; margin: 0 auto 10px; }
-.tint-mint { background: var(--okbg); } .tint-sky { background: #def2ff; } .tint-sun { background: #fff3bd; }
-.tint-pink { background: #ffe3ef; } .tint-lav { background: #ece4ff; } .tint-coral { background: #ffe3dc; }
-.price { font-family: var(--head); font-size: 1.5rem; font-weight: 700; }
+/* Cards */
+.grid { display: grid; gap: 26px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+.card { background: #fff; border-radius: 24px; padding: 26px; box-shadow: var(--shadow); border: 1px solid #d6e8ff; transition: transform .2s; }
+.card:hover { transform: translateY(-5px); }
+.card .pic { width: 120px; margin: 0 auto 12px; }
+.tint-mint, .tint-sky, .tint-sun, .tint-pink, .tint-lav, .tint-coral { background: #fff; }
+.price { font-size: 1.6rem; font-weight: 800; color: var(--blue); }
 
 /* =====================================================
    3. BANNER + NAV
    ===================================================== */
-.concept-banner {
-  background: var(--sun); border-bottom: 3px solid var(--ink); text-align: center;
-  font-weight: 700; padding: 8px 12px; font-size: 1rem;
-}
-nav { position: sticky; top: 0; z-index: 50; background: var(--paper); border-bottom: 3px solid var(--ink); }
+.concept-banner { background: var(--navy); color: #fff; text-align: center; font-weight: 600; padding: 8px 12px; font-size: .95rem; }
+nav { position: sticky; top: 0; z-index: 50; background: rgba(244,249,255,.92); backdrop-filter: blur(10px); border-bottom: 1px solid #cfe3ff; }
 .nav-inner { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 66px; flex-wrap: wrap; }
-.logo { display: flex; align-items: center; gap: 8px; font-family: var(--head); font-weight: 700; font-size: 1.6rem; text-decoration: none; }
-.logo svg { width: 44px; height: 48px; }
-.nav-links { display: flex; gap: 4px; flex-wrap: wrap; list-style: none; margin: 0; padding: 0; }
-.nav-links a { text-decoration: none; padding: 6px 12px; border-radius: 999px; font-weight: 700; font-size: 1rem; border: 2.5px solid transparent; }
-.nav-links a:hover { border-color: var(--ink); background: var(--mint); }
+.logo { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 1.5rem; text-decoration: none; color: var(--navy); }
+.logo svg { width: 40px; height: 44px; }
+.nav-links { display: flex; gap: 2px; flex-wrap: wrap; list-style: none; margin: 0; padding: 0; }
+.nav-links a { text-decoration: none; color: var(--navy); padding: 7px 12px; border-radius: 999px; font-weight: 600; font-size: 1rem; }
+.nav-links a:hover { background: var(--sky); }
 #menuBtn { display: none; }
 @media (max-width: 960px) {
   #menuBtn { display: block; }
@@ -113,137 +87,125 @@ nav { position: sticky; top: 0; z-index: 50; background: var(--paper); border-bo
   .nav-links.open { display: flex; }
 }
 
-/* Wavy divider between sections */
-.wave { display: block; width: 100%; height: 40px; margin-bottom: -2px; }
-
 /* =====================================================
-   4. HERO
+   4. HERO (deep blue)
    ===================================================== */
-.hero { padding: 60px 0 90px; background: linear-gradient(#cfeeff 0%, #fff6e5 100%); border-bottom: 3px solid var(--ink); overflow: hidden; }
+.hero { padding: 70px 0 120px; color: #fff; background: radial-gradient(circle at 80% 20%, #2f6fe0 0%, #123f8c 45%, #0b2a5b 100%); overflow: hidden; }
 .hero-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 30px; align-items: center; }
-.hero .tagline { font-family: var(--head); font-size: clamp(1.2rem, 3vw, 1.7rem); font-weight: 700; }
-.hero .tagline mark { background: var(--sun); padding: 0 8px; border-radius: 8px; }
-.hero .btn-row { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 26px; }
-.speech {
-  position: absolute; top: 0; right: 4%; background: #fff; border: 3px solid var(--ink); border-radius: 22px; padding: 8px 16px;
-  font-family: var(--head); font-weight: 700; transform: rotate(4deg); z-index: 2;
-}
-.speech::after { content: ""; position: absolute; bottom: -14px; left: 30px; border: 10px solid transparent; border-top-color: var(--ink); }
-.hero-art { position: relative; padding-top: 50px; }
-@media (max-width: 800px) { .hero-grid { grid-template-columns: 1fr; } .hero-art { max-width: 340px; margin: 0 auto; } }
+.hero .eyebrow { background: rgba(255,255,255,.16); color: #fff; }
+.hero .tagline { font-size: clamp(1.2rem, 3vw, 1.7rem); font-weight: 700; color: var(--sky); }
+.hero .lead { color: #e4f2ff; }
+.hero .btn-row { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 26px; }
+.hero .btn-white { background: transparent; color: #fff; border-color: rgba(255,255,255,.6); }
+.hero .btn-mint { background: #fff; color: var(--deep); }
+.hero-art { position: relative; max-width: 360px; margin: 0 auto; }
+.hero-art::before { content: ""; position: absolute; inset: 6% 2% 0; border-radius: 50%; background: radial-gradient(circle, #e4f2ff 0%, #a9d8ff 70%, rgba(169,216,255,0) 72%); }
+.hero-art svg { position: relative; padding: 30px; }
+.speech { position: absolute; top: -6px; right: -6px; z-index: 2; background: #fff; color: var(--navy); border-radius: 18px; padding: 6px 16px; font-weight: 700; box-shadow: var(--shadow); font-size: 1rem; }
+@media (max-width: 800px) { .hero-grid { grid-template-columns: 1fr; } }
 
 /* Stats strip */
-.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 18px; margin-top: -48px; position: relative; z-index: 3; }
-.stat { background: #fff; border: 3px solid var(--ink); border-radius: 18px; padding: 16px; text-align: center; box-shadow: 5px 5px 0 var(--ink); }
-.stat b { font-family: var(--head); font-size: 2rem; display: block; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 18px; margin-top: -60px; position: relative; z-index: 3; }
+.stat { background: #fff; border-radius: 20px; padding: 18px; text-align: center; box-shadow: var(--shadow); }
+.stat b { font-size: 2rem; display: block; color: var(--blue); }
 
 /* =====================================================
    5. PROBLEM
    ===================================================== */
-.scam-msg { background: #fff; border: 3px solid var(--ink); border-radius: 18px 18px 18px 4px; padding: 14px 16px; position: relative; box-shadow: 5px 5px 0 var(--ink); }
-.scam-msg small { display: block; font-weight: 700; margin-bottom: 4px; }
-.stamp {
-  position: absolute; top: -14px; right: -8px; transform: rotate(8deg); background: var(--warnbg); color: var(--warn);
-  border: 3px solid var(--warn); border-radius: 8px; padding: 0 10px; font-family: var(--head); font-weight: 700; font-size: .95rem;
-}
-.stat-note { background: #fff; border: 3px dashed var(--ink); border-radius: 18px; padding: 18px; margin-top: 30px; }
+.scam-msg { background: #fff; border-radius: 20px 20px 20px 4px; padding: 18px 18px; position: relative; box-shadow: var(--shadow); border-left: 6px solid var(--warn); }
+.scam-msg small { display: block; font-weight: 800; margin-bottom: 4px; }
+.stamp { position: absolute; top: -12px; right: 12px; background: var(--warnbg); color: var(--warn); border: 2px solid var(--warn); border-radius: 8px; padding: 0 10px; font-weight: 800; font-size: .85rem; }
+.stat-note { background: #fff; border-radius: 20px; padding: 20px; margin-top: 30px; border: 2px dashed var(--mid); }
 
 /* =====================================================
    6. HOW IT WORKS
    ===================================================== */
-.steps { counter-reset: s; display: grid; gap: 26px; grid-template-columns: repeat(auto-fit, minmax(230px,1fr)); list-style: none; padding: 0; margin: 34px 0 54px; }
-.steps li { counter-increment: s; background: #fff; border: 3px solid var(--ink); border-radius: 22px; padding: 20px; position: relative; box-shadow: 6px 6px 0 var(--ink); }
-.steps li::before {
-  content: counter(s); position: absolute; top: -18px; left: -10px; width: 42px; height: 42px; border-radius: 50%;
-  background: var(--coral); border: 3px solid var(--ink); display: grid; place-items: center; font-family: var(--head); font-weight: 700; font-size: 1.3rem;
-}
-.steps .pic { width: 110px; margin: 0 auto 8px; }
+.steps { counter-reset: s; display: grid; gap: 24px; grid-template-columns: repeat(auto-fit, minmax(230px,1fr)); list-style: none; padding: 0; margin: 34px 0 54px; }
+.steps li { counter-increment: s; background: #fff; border-radius: 24px; padding: 24px 20px; position: relative; box-shadow: var(--shadow); text-align: center; }
+.steps li::before { content: counter(s); position: absolute; top: -16px; left: 20px; width: 36px; height: 36px; border-radius: 50%; background: var(--blue); color: #fff; display: grid; place-items: center; font-weight: 800; }
+.steps .pic { width: 100px; margin: 0 auto 10px; }
 
-.checker { background: #fff; border: 3px solid var(--ink); border-radius: 26px; padding: 28px; box-shadow: 8px 8px 0 var(--ink); display: grid; grid-template-columns: 1fr 150px; gap: 20px; }
-.checker textarea, form textarea {
-  width: 100%; min-height: 130px; font: inherit; padding: 14px; border: 3px solid var(--ink); border-radius: 14px; background: #fffdf7; color: var(--ink); resize: vertical;
-}
+.checker { background: #fff; border-radius: 28px; padding: 30px; box-shadow: var(--shadow); display: grid; grid-template-columns: 1fr 150px; gap: 20px; }
+.checker textarea, form textarea { width: 100%; min-height: 130px; font: inherit; padding: 14px; border: 2px solid var(--sky); border-radius: 16px; background: var(--pale); color: var(--navy); resize: vertical; }
 .chips { display: flex; gap: 8px; flex-wrap: wrap; margin: 10px 0 14px; }
-.result { margin-top: 16px; padding: 16px; border-radius: 14px; border: 3px solid var(--ink); font-weight: 700; }
+.result { margin-top: 16px; padding: 16px; border-radius: 16px; font-weight: 700; }
 .result[hidden] { display: none; }
-.result.bad { background: var(--warnbg); border-color: var(--warn); color: #6e0a14; }
-.result.good { background: var(--okbg); }
+.result.bad { background: var(--warnbg); border: 2px solid var(--warn); color: #6e0a14; }
+.result.good { background: var(--okbg); border: 2px solid #2e9e66; }
 .result ul { margin: 6px 0 0; padding-left: 24px; }
-.result .note { font-weight: 400; font-size: .95rem; margin: 8px 0 0; color: var(--ink); }
-@media (max-width: 760px) { .checker { grid-template-columns: 1fr; } .checker .mascot-side { max-width: 120px; margin: 0 auto; order: -1; } }
+.result .note { font-weight: 400; font-size: .95rem; margin: 8px 0 0; color: var(--navy); }
+@media (max-width: 760px) { .checker { grid-template-columns: 1fr; } .checker .mascot-side { max-width: 110px; margin: 0 auto; order: -1; } }
 
 /* =====================================================
    7. PRODUCTS
    ===================================================== */
-.led { width: 44px; height: 44px; border-radius: 50%; border: 3px solid var(--ink); background: #35d07f; box-shadow: 0 0 14px 4px #35d07f; transition: .3s; flex: none; }
+.led { width: 44px; height: 44px; border-radius: 50%; border: 3px solid var(--navy); background: #35d07f; box-shadow: 0 0 14px 4px #35d07f; transition: .3s; flex: none; }
 .led.danger { background: var(--warn); box-shadow: 0 0 20px 8px var(--warn); animation: flash .5s infinite alternate; }
 @keyframes flash { to { opacity: .35; } }
 .detector-demo { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 8px; }
-.strobe { height: 16px; border: 3px solid var(--ink); border-radius: 10px; margin-top: 8px; background: linear-gradient(90deg, var(--coral), var(--sun), var(--coral)); background-size: 200% 100%; animation: sweep 1s linear infinite; }
+.strobe { height: 14px; border-radius: 10px; margin-top: 8px; background: linear-gradient(90deg, var(--blue), #fff, var(--blue)); background-size: 200% 100%; animation: sweep 1s linear infinite; }
 @keyframes sweep { to { background-position: -200% 0; } }
 .spec { list-style: none; padding: 0; margin: 10px 0 0; font-size: 1rem; }
-.spec li::before { content: "✏️ "; }
+.spec li::before { content: "✓ "; color: var(--blue); font-weight: 800; }
 
 /* =====================================================
    8. PACKAGES
    ===================================================== */
-.table-scroll { overflow-x: auto; padding: 20px 6px 14px; }
-table.pkg { width: 100%; min-width: 680px; border-collapse: separate; border-spacing: 0; border: 3px solid var(--ink); border-radius: 22px; background: #fff; box-shadow: 8px 8px 0 var(--ink); overflow: hidden; }
-.pkg th, .pkg td { padding: 14px; text-align: center; border-bottom: 2.5px solid var(--ink); }
+.table-scroll { overflow-x: auto; padding: 14px 6px 18px; }
+table.pkg { width: 100%; min-width: 680px; border-collapse: separate; border-spacing: 0; background: #fff; border-radius: 24px; box-shadow: var(--shadow); overflow: hidden; }
+.pkg th, .pkg td { padding: 14px; text-align: center; border-bottom: 1px solid #d6e8ff; }
 .pkg tbody tr:last-child th, .pkg tbody tr:last-child td { border-bottom: 0; }
-.pkg th[scope="row"] { text-align: left; background: var(--paper2); }
-.pkg td + td, .pkg th + th, .pkg th[scope=row] + td { border-left: 2.5px dashed var(--ink); }
-.pkg thead th { background: var(--sky); font-family: var(--head); font-size: 1.2rem; vertical-align: bottom; }
-.pkg thead th.pop { background: var(--sun); }
-.pkg td.pop { background: #fff7cf; font-weight: 700; }
-.pkg .amount { display: block; font-size: 1.8rem; }
-.badge { display: inline-block; background: var(--coral); border: 2.5px solid var(--ink); border-radius: 999px; padding: 0 12px; font-size: .85rem; transform: rotate(-4deg); margin-bottom: 6px; }
+.pkg th[scope="row"] { text-align: left; background: var(--pale); }
+.pkg thead th { background: var(--light); font-size: 1.15rem; vertical-align: bottom; }
+.pkg thead th.pop { background: linear-gradient(135deg, var(--blue), var(--deep)); color: #fff; }
+.pkg td.pop { background: #eef5ff; font-weight: 700; }
+.pkg .amount { display: block; font-size: 1.8rem; font-weight: 800; }
+.badge { display: inline-block; background: #fff; color: var(--deep); border-radius: 999px; padding: 0 12px; font-size: .85rem; font-weight: 800; margin-bottom: 6px; }
 
 /* =====================================================
-   9. MODES / DEVICES / PRIVACY
+   9. DEVICES / ASSISTANT
    ===================================================== */
 .compat { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(240px,1fr)); padding: 0; list-style: none; margin: 26px 0; }
-.compat li { background: #fff; border: 3px solid var(--ink); border-radius: 14px; padding: 10px 16px; display: flex; justify-content: space-between; align-items: center; font-weight: 700; box-shadow: 4px 4px 0 var(--ink); }
-.mark { width: 34px; height: 34px; border-radius: 50%; border: 3px solid var(--ink); display: grid; place-items: center; font-weight: 800; }
-.mark.yes { background: var(--mint); } .mark.some { background: var(--sun); } .mark.no { background: var(--warnbg); color: var(--warn); border-color: var(--warn); }
-.assistant-bubble { display: flex; align-items: center; gap: 16px; background: var(--lav); border: 3px solid var(--ink); border-radius: 22px; padding: 14px 20px; box-shadow: 6px 6px 0 var(--ink); max-width: 720px; }
-.assistant-bubble svg { width: 90px; flex: none; }
+.compat li { background: #fff; border-radius: 16px; padding: 10px 16px; display: flex; justify-content: space-between; align-items: center; font-weight: 600; box-shadow: 0 4px 14px rgba(18,63,140,.1); }
+.mark { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; }
+.mark.yes { background: var(--blue); color: #fff; } .mark.some { background: var(--sky); color: var(--navy); } .mark.no { background: var(--warnbg); color: var(--warn); }
+.assistant-bubble { display: flex; align-items: center; gap: 16px; background: #fff; border-radius: 24px; padding: 14px 22px; box-shadow: var(--shadow); max-width: 720px; }
+.assistant-bubble svg { width: 80px; flex: none; }
 
 /* =====================================================
    10. ROADMAP
    ===================================================== */
-.timeline { display: flex; gap: 22px; overflow-x: auto; padding: 36px 8px 24px; list-style: none; margin: 0; position: relative; }
-.timeline li { flex: 0 0 235px; background: #fff; border: 3px solid var(--ink); border-radius: 20px; padding: 20px; position: relative; box-shadow: 5px 5px 0 var(--ink); }
-.timeline li::before { content: ""; position: absolute; top: -22px; left: 24px; width: 22px; height: 22px; background: var(--coral); border: 3px solid var(--ink); border-radius: 50%; }
-.timeline li:nth-child(3n+2)::before { background: var(--mint); } .timeline li:nth-child(3n)::before { background: var(--sun); }
-.timeline .ver { font-family: var(--head); font-size: 1.6rem; font-weight: 700; display: block; }
-.timeline small { display: block; margin-top: 8px; font-weight: 700; }
+.timeline { display: flex; gap: 20px; overflow-x: auto; padding: 30px 8px 22px; list-style: none; margin: 0; }
+.timeline li { flex: 0 0 235px; background: #fff; border-radius: 20px; padding: 20px; position: relative; box-shadow: var(--shadow); }
+.timeline li::before { content: ""; position: absolute; top: -18px; left: 22px; width: 18px; height: 18px; background: var(--blue); border: 4px solid var(--light); border-radius: 50%; }
+.timeline .ver { font-size: 1.6rem; font-weight: 800; display: block; color: var(--blue); }
+.timeline small { display: block; margin-top: 8px; font-weight: 700; color: var(--deep); }
 
 /* =====================================================
    11. TESTIMONIALS / FAQ / FEEDBACK / FOOTER
    ===================================================== */
-.avatar { width: 62px; float: left; margin-right: 12px; }
-.quote { font-style: italic; }
-details { background: #fff; border: 3px solid var(--ink); border-radius: 16px; padding: 4px 18px; margin-bottom: 14px; box-shadow: 4px 4px 0 var(--ink); }
-summary { cursor: pointer; font-weight: 700; padding: 12px 0; font-family: var(--head); font-size: 1.15rem; }
-details[open] { background: #fff3bd; }
+.avatar { width: 48px; height: 48px; border-radius: 50%; background: var(--blue); color: #fff; display: grid; place-items: center; font-weight: 800; float: left; margin-right: 12px; }
+.quote { font-style: italic; clear: both; padding-top: 8px; }
+details { background: #fff; border-radius: 18px; padding: 4px 20px; margin-bottom: 12px; box-shadow: 0 4px 14px rgba(18,63,140,.1); }
+summary { cursor: pointer; font-weight: 700; padding: 12px 0; font-size: 1.1rem; }
+details[open] { background: var(--light); }
 
-form.feedback { max-width: 660px; background: #fff; border: 3px solid var(--ink); border-radius: 24px; padding: 28px; box-shadow: 8px 8px 0 var(--ink); }
+form.feedback { max-width: 660px; background: #fff; border-radius: 28px; padding: 30px; box-shadow: var(--shadow); }
 fieldset { border: 0; padding: 0; margin: 0 0 18px; }
 legend { font-weight: 700; padding: 0; margin-bottom: 4px; }
 .stars { display: inline-flex; flex-direction: row-reverse; gap: 4px; }
 .stars input { position: absolute; opacity: 0; width: 1px; height: 1px; }
-.stars label { font-size: 2.8rem; line-height: 1; color: #fff; -webkit-text-stroke: 2.5px var(--ink); cursor: pointer; }
-.stars label:hover, .stars label:hover ~ label, .stars input:checked ~ label { color: var(--sun); }
-.stars input:focus-visible + label { outline: 4px solid var(--warn); border-radius: 8px; }
+.stars label { font-size: 2.8rem; line-height: 1; color: #c9dcf5; cursor: pointer; }
+.stars label:hover, .stars label:hover ~ label, .stars input:checked ~ label { color: var(--blue); }
+.stars input:focus-visible + label { outline: 4px solid var(--blue); border-radius: 8px; }
 .sr { position: absolute; left: -999px; }
-.thanks { max-width: 660px; background: var(--okbg); border: 3px solid var(--ink); border-radius: 24px; padding: 24px; box-shadow: 8px 8px 0 var(--ink); display: flex; gap: 16px; align-items: center; }
+.thanks { max-width: 660px; background: #fff; border-radius: 28px; padding: 24px; box-shadow: var(--shadow); display: flex; gap: 16px; align-items: center; }
 .thanks[hidden] { display: none; }
-.thanks svg { width: 100px; flex: none; }
+.thanks svg { width: 90px; flex: none; }
 
-footer { background: var(--ink); color: #fff6e5; padding: 50px 0; }
-footer a { color: var(--sun); }
-.foot-grid { display: grid; grid-template-columns: 120px 1fr; gap: 24px; align-items: center; }
+footer { background: var(--navy); color: #e4f2ff; padding: 50px 0; }
+.foot-grid { display: grid; grid-template-columns: 100px 1fr; gap: 24px; align-items: center; }
+footer svg { background: #e4f2ff; border-radius: 50%; padding: 12px; }
 @media (max-width: 600px) { .foot-grid { grid-template-columns: 1fr; } }
 
 @media (prefers-reduced-motion: reduce) {
@@ -265,155 +227,155 @@ footer a { color: var(--sun); }
 <defs>
   <!-- Shieldy the mascot -->
   <symbol id="mascot" viewBox="0 0 120 140">
-    <path d="M60 6 14 22v36c0 34 20 56 46 70 26-14 46-36 46-70V22L60 6Z" fill="#7be0c3" stroke="#2b2b3a" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M60 6 14 22v36c0 34 20 56 46 70 26-14 46-36 46-70V22L60 6Z" fill="#4aa8ff" stroke="#0b2a5b" stroke-width="5" stroke-linejoin="round"/>
     <path d="M60 18 26 30v28c0 26 14 44 34 56" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".6"/>
-    <ellipse cx="44" cy="62" rx="7" ry="9" fill="#fff" stroke="#2b2b3a" stroke-width="3"/><circle cx="46" cy="64" r="4" fill="#2b2b3a"/>
-    <ellipse cx="76" cy="62" rx="7" ry="9" fill="#fff" stroke="#2b2b3a" stroke-width="3"/><circle cx="78" cy="64" r="4" fill="#2b2b3a"/>
-    <path d="M44 86q16 16 32 0" fill="#fff" stroke="#2b2b3a" stroke-width="4" stroke-linecap="round"/>
-    <circle cx="32" cy="80" r="6" fill="#ff8f7a" opacity=".7"/><circle cx="88" cy="80" r="6" fill="#ff8f7a" opacity=".7"/>
-    <path d="M40 48q5-5 10 0M70 48q5-5 10 0" fill="none" stroke="#2b2b3a" stroke-width="3" stroke-linecap="round"/>
-    <path d="M12 70q-12 4-10 18M108 70q12 4 10 18" fill="none" stroke="#2b2b3a" stroke-width="5" stroke-linecap="round"/>
-    <circle cx="3" cy="90" r="6" fill="#fff" stroke="#2b2b3a" stroke-width="3"/><circle cx="117" cy="90" r="6" fill="#fff" stroke="#2b2b3a" stroke-width="3"/>
+    <ellipse cx="44" cy="62" rx="7" ry="9" fill="#fff" stroke="#0b2a5b" stroke-width="3"/><circle cx="46" cy="64" r="4" fill="#0b2a5b"/>
+    <ellipse cx="76" cy="62" rx="7" ry="9" fill="#fff" stroke="#0b2a5b" stroke-width="3"/><circle cx="78" cy="64" r="4" fill="#0b2a5b"/>
+    <path d="M44 86q16 16 32 0" fill="#fff" stroke="#0b2a5b" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="32" cy="80" r="6" fill="#2f6fe0" opacity=".7"/><circle cx="88" cy="80" r="6" fill="#2f6fe0" opacity=".7"/>
+    <path d="M40 48q5-5 10 0M70 48q5-5 10 0" fill="none" stroke="#0b2a5b" stroke-width="3" stroke-linecap="round"/>
+    <path d="M12 70q-12 4-10 18M108 70q12 4 10 18" fill="none" stroke="#0b2a5b" stroke-width="5" stroke-linecap="round"/>
+    <circle cx="3" cy="90" r="6" fill="#fff" stroke="#0b2a5b" stroke-width="3"/><circle cx="117" cy="90" r="6" fill="#fff" stroke="#0b2a5b" stroke-width="3"/>
   </symbol>
   <!-- Small logo version (shield + check) -->
   <symbol id="logo" viewBox="0 0 64 72">
-    <path d="M32 4 6 14v22c0 17 11 28 26 33 15-5 26-16 26-33V14L32 4Z" fill="#7be0c3" stroke="#2b2b3a" stroke-width="4" stroke-linejoin="round"/>
-    <path d="m19 37 9 9 17-19" fill="none" stroke="#2b2b3a" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M32 4 6 14v22c0 17 11 28 26 33 15-5 26-16 26-33V14L32 4Z" fill="#4aa8ff" stroke="#0b2a5b" stroke-width="4" stroke-linejoin="round"/>
+    <path d="m19 37 9 9 17-19" fill="none" stroke="#0b2a5b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
   </symbol>
   <!-- Grandma -->
   <symbol id="grandma" viewBox="0 0 120 130">
-    <circle cx="60" cy="22" r="16" fill="#d9d9e6" stroke="#2b2b3a" stroke-width="4"/>
-    <path d="M22 118c0-34 16-50 38-50s38 16 38 50Z" fill="#c9b6ff" stroke="#2b2b3a" stroke-width="4"/>
-    <path d="M60 68v50" stroke="#2b2b3a" stroke-width="3"/><circle cx="52" cy="86" r="3" fill="#2b2b3a"/><circle cx="52" cy="102" r="3" fill="#2b2b3a"/>
-    <circle cx="60" cy="52" r="28" fill="#ffd3b0" stroke="#2b2b3a" stroke-width="4"/>
-    <path d="M32 46c2-22 54-22 56 0-10-12-46-12-56 0Z" fill="#d9d9e6" stroke="#2b2b3a" stroke-width="4" stroke-linejoin="round"/>
-    <circle cx="48" cy="54" r="8" fill="#fff" stroke="#2b2b3a" stroke-width="3"/><circle cx="72" cy="54" r="8" fill="#fff" stroke="#2b2b3a" stroke-width="3"/>
-    <path d="M56 54h8" stroke="#2b2b3a" stroke-width="3"/><circle cx="48" cy="55" r="2.5" fill="#2b2b3a"/><circle cx="72" cy="55" r="2.5" fill="#2b2b3a"/>
-    <path d="M50 68q10 9 20 0" fill="none" stroke="#2b2b3a" stroke-width="3.5" stroke-linecap="round"/>
-    <circle cx="40" cy="64" r="5" fill="#ff8f7a" opacity=".6"/><circle cx="80" cy="64" r="5" fill="#ff8f7a" opacity=".6"/>
+    <circle cx="60" cy="22" r="16" fill="#d9d9e6" stroke="#0b2a5b" stroke-width="4"/>
+    <path d="M22 118c0-34 16-50 38-50s38 16 38 50Z" fill="#7aa2ff" stroke="#0b2a5b" stroke-width="4"/>
+    <path d="M60 68v50" stroke="#0b2a5b" stroke-width="3"/><circle cx="52" cy="86" r="3" fill="#0b2a5b"/><circle cx="52" cy="102" r="3" fill="#0b2a5b"/>
+    <circle cx="60" cy="52" r="28" fill="#ffdcc2" stroke="#0b2a5b" stroke-width="4"/>
+    <path d="M32 46c2-22 54-22 56 0-10-12-46-12-56 0Z" fill="#d9d9e6" stroke="#0b2a5b" stroke-width="4" stroke-linejoin="round"/>
+    <circle cx="48" cy="54" r="8" fill="#fff" stroke="#0b2a5b" stroke-width="3"/><circle cx="72" cy="54" r="8" fill="#fff" stroke="#0b2a5b" stroke-width="3"/>
+    <path d="M56 54h8" stroke="#0b2a5b" stroke-width="3"/><circle cx="48" cy="55" r="2.5" fill="#0b2a5b"/><circle cx="72" cy="55" r="2.5" fill="#0b2a5b"/>
+    <path d="M50 68q10 9 20 0" fill="none" stroke="#0b2a5b" stroke-width="3.5" stroke-linecap="round"/>
+    <circle cx="40" cy="64" r="5" fill="#2f6fe0" opacity=".6"/><circle cx="80" cy="64" r="5" fill="#2f6fe0" opacity=".6"/>
   </symbol>
   <!-- Phone with scam warning -->
   <symbol id="phone-scam" viewBox="0 0 90 140">
-    <rect x="8" y="6" width="74" height="128" rx="14" fill="#fff" stroke="#2b2b3a" stroke-width="5"/>
-    <rect x="16" y="22" width="58" height="92" rx="6" fill="#ffe1e3" stroke="#2b2b3a" stroke-width="3"/>
-    <path d="M45 34 66 74H24Z" fill="#ffd95e" stroke="#d62839" stroke-width="4" stroke-linejoin="round"/>
+    <rect x="8" y="6" width="74" height="128" rx="14" fill="#fff" stroke="#0b2a5b" stroke-width="5"/>
+    <rect x="16" y="22" width="58" height="92" rx="6" fill="#ffe1e3" stroke="#0b2a5b" stroke-width="3"/>
+    <path d="M45 34 66 74H24Z" fill="#e4f2ff" stroke="#d62839" stroke-width="4" stroke-linejoin="round"/>
     <path d="M45 46v14" stroke="#d62839" stroke-width="5" stroke-linecap="round"/><circle cx="45" cy="67" r="2.6" fill="#d62839"/>
     <path d="M26 88h38M26 98h28" stroke="#d62839" stroke-width="4" stroke-linecap="round"/>
-    <circle cx="45" cy="124" r="4" fill="none" stroke="#2b2b3a" stroke-width="3"/>
+    <circle cx="45" cy="124" r="4" fill="none" stroke="#0b2a5b" stroke-width="3"/>
   </symbol>
   <!-- Grandson (phone call) -->
   <symbol id="grandson" viewBox="0 0 110 130">
-    <path d="M18 124c0-30 14-46 37-46s37 16 37 46Z" fill="#8fd3ff" stroke="#2b2b3a" stroke-width="4"/>
-    <circle cx="55" cy="46" r="28" fill="#ffd3b0" stroke="#2b2b3a" stroke-width="4"/>
-    <path d="M27 42c0-26 56-30 56 0-8-10-18-14-28-14s-20 4-28 14Z" fill="#6b4226" stroke="#2b2b3a" stroke-width="4" stroke-linejoin="round"/>
-    <circle cx="44" cy="50" r="3.5" fill="#2b2b3a"/><circle cx="66" cy="50" r="3.5" fill="#2b2b3a"/>
-    <path d="M44 63q11 8 22 0" fill="none" stroke="#2b2b3a" stroke-width="3.5" stroke-linecap="round"/>
+    <path d="M18 124c0-30 14-46 37-46s37 16 37 46Z" fill="#a9d8ff" stroke="#0b2a5b" stroke-width="4"/>
+    <circle cx="55" cy="46" r="28" fill="#ffdcc2" stroke="#0b2a5b" stroke-width="4"/>
+    <path d="M27 42c0-26 56-30 56 0-8-10-18-14-28-14s-20 4-28 14Z" fill="#6b4226" stroke="#0b2a5b" stroke-width="4" stroke-linejoin="round"/>
+    <circle cx="44" cy="50" r="3.5" fill="#0b2a5b"/><circle cx="66" cy="50" r="3.5" fill="#0b2a5b"/>
+    <path d="M44 63q11 8 22 0" fill="none" stroke="#0b2a5b" stroke-width="3.5" stroke-linecap="round"/>
   </symbol>
   <!-- Scammer -->
   <symbol id="scammer" viewBox="0 0 110 130">
-    <path d="M18 124c0-30 14-46 37-46s37 16 37 46Z" fill="#555568" stroke="#2b2b3a" stroke-width="4"/>
-    <circle cx="55" cy="46" r="28" fill="#ffd3b0" stroke="#2b2b3a" stroke-width="4"/>
-    <path d="M24 44c2-30 60-30 62 0Z" fill="#2b2b3a" stroke="#2b2b3a" stroke-width="4" stroke-linejoin="round"/>
-    <path d="M22 44h66" stroke="#2b2b3a" stroke-width="6" stroke-linecap="round"/>
-    <rect x="30" y="48" width="50" height="14" rx="5" fill="#2b2b3a"/><circle cx="43" cy="55" r="3" fill="#ffd95e"/><circle cx="67" cy="55" r="3" fill="#ffd95e"/>
-    <path d="M42 74q13-10 26 0" fill="none" stroke="#2b2b3a" stroke-width="3.5" stroke-linecap="round"/>
+    <path d="M18 124c0-30 14-46 37-46s37 16 37 46Z" fill="#555568" stroke="#0b2a5b" stroke-width="4"/>
+    <circle cx="55" cy="46" r="28" fill="#ffdcc2" stroke="#0b2a5b" stroke-width="4"/>
+    <path d="M24 44c2-30 60-30 62 0Z" fill="#0b2a5b" stroke="#0b2a5b" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M22 44h66" stroke="#0b2a5b" stroke-width="6" stroke-linecap="round"/>
+    <rect x="30" y="48" width="50" height="14" rx="5" fill="#0b2a5b"/><circle cx="43" cy="55" r="3" fill="#e4f2ff"/><circle cx="67" cy="55" r="3" fill="#e4f2ff"/>
+    <path d="M42 74q13-10 26 0" fill="none" stroke="#0b2a5b" stroke-width="3.5" stroke-linecap="round"/>
   </symbol>
   <!-- Router hub -->
   <symbol id="router" viewBox="0 0 140 110">
-    <path d="M36 40 24 6M104 40 116 6" stroke="#2b2b3a" stroke-width="5" stroke-linecap="round"/>
-    <circle cx="24" cy="6" r="5" fill="#ffd95e" stroke="#2b2b3a" stroke-width="3"/><circle cx="116" cy="6" r="5" fill="#ffd95e" stroke="#2b2b3a" stroke-width="3"/>
-    <rect x="6" y="40" width="128" height="62" rx="16" fill="#8fd3ff" stroke="#2b2b3a" stroke-width="5"/>
-    <rect x="24" y="50" width="56" height="34" rx="6" fill="#2b2b3a"/>
-    <path d="m34 68 7 7 14-15" fill="none" stroke="#7be0c3" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M62 62h12M62 72h8" stroke="#7be0c3" stroke-width="3" stroke-linecap="round"/>
-    <circle cx="98" cy="62" r="5" fill="#7be0c3" stroke="#2b2b3a" stroke-width="2.5"/><circle cx="114" cy="62" r="5" fill="#ffd95e" stroke="#2b2b3a" stroke-width="2.5"/><circle cx="98" cy="80" r="5" fill="#ff8f7a" stroke="#2b2b3a" stroke-width="2.5"/><circle cx="114" cy="80" r="5" fill="#fff" stroke="#2b2b3a" stroke-width="2.5"/>
+    <path d="M36 40 24 6M104 40 116 6" stroke="#0b2a5b" stroke-width="5" stroke-linecap="round"/>
+    <circle cx="24" cy="6" r="5" fill="#e4f2ff" stroke="#0b2a5b" stroke-width="3"/><circle cx="116" cy="6" r="5" fill="#e4f2ff" stroke="#0b2a5b" stroke-width="3"/>
+    <rect x="6" y="40" width="128" height="62" rx="16" fill="#a9d8ff" stroke="#0b2a5b" stroke-width="5"/>
+    <rect x="24" y="50" width="56" height="34" rx="6" fill="#0b2a5b"/>
+    <path d="m34 68 7 7 14-15" fill="none" stroke="#4aa8ff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M62 62h12M62 72h8" stroke="#4aa8ff" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="98" cy="62" r="5" fill="#4aa8ff" stroke="#0b2a5b" stroke-width="2.5"/><circle cx="114" cy="62" r="5" fill="#e4f2ff" stroke="#0b2a5b" stroke-width="2.5"/><circle cx="98" cy="80" r="5" fill="#2f6fe0" stroke="#0b2a5b" stroke-width="2.5"/><circle cx="114" cy="80" r="5" fill="#fff" stroke="#0b2a5b" stroke-width="2.5"/>
   </symbol>
   <!-- Camera -->
   <symbol id="camera" viewBox="0 0 140 110">
-    <path d="M70 70v28M44 100h52" stroke="#2b2b3a" stroke-width="6" stroke-linecap="round"/>
-    <rect x="8" y="14" width="124" height="58" rx="18" fill="#c9b6ff" stroke="#2b2b3a" stroke-width="5"/>
-    <circle cx="52" cy="43" r="22" fill="#fff" stroke="#2b2b3a" stroke-width="5"/><circle cx="52" cy="43" r="12" fill="#2b2b3a"/><circle cx="47" cy="38" r="4" fill="#fff"/>
-    <circle cx="104" cy="30" r="5" fill="#ff8f7a" stroke="#2b2b3a" stroke-width="2.5"/><path d="M88 54h30" stroke="#2b2b3a" stroke-width="4" stroke-linecap="round"/>
+    <path d="M70 70v28M44 100h52" stroke="#0b2a5b" stroke-width="6" stroke-linecap="round"/>
+    <rect x="8" y="14" width="124" height="58" rx="18" fill="#7aa2ff" stroke="#0b2a5b" stroke-width="5"/>
+    <circle cx="52" cy="43" r="22" fill="#fff" stroke="#0b2a5b" stroke-width="5"/><circle cx="52" cy="43" r="12" fill="#0b2a5b"/><circle cx="47" cy="38" r="4" fill="#fff"/>
+    <circle cx="104" cy="30" r="5" fill="#2f6fe0" stroke="#0b2a5b" stroke-width="2.5"/><path d="M88 54h30" stroke="#0b2a5b" stroke-width="4" stroke-linecap="round"/>
   </symbol>
   <!-- Detector -->
   <symbol id="detector" viewBox="0 0 120 120">
-    <circle cx="60" cy="60" r="54" fill="#fff" stroke="#2b2b3a" stroke-width="5"/>
-    <circle cx="60" cy="60" r="38" fill="#ffeccb" stroke="#2b2b3a" stroke-width="3"/>
-    <path d="M60 28v8M60 84v8M28 60h8M84 60h8M37 37l6 6M77 77l6 6M83 37l-6 6M43 77l-6 6" stroke="#2b2b3a" stroke-width="3.5" stroke-linecap="round"/>
-    <circle cx="60" cy="60" r="12" fill="#35d07f" stroke="#2b2b3a" stroke-width="4"/>
+    <circle cx="60" cy="60" r="54" fill="#fff" stroke="#0b2a5b" stroke-width="5"/>
+    <circle cx="60" cy="60" r="38" fill="#eaf4ff" stroke="#0b2a5b" stroke-width="3"/>
+    <path d="M60 28v8M60 84v8M28 60h8M84 60h8M37 37l6 6M77 77l6 6M83 37l-6 6M43 77l-6 6" stroke="#0b2a5b" stroke-width="3.5" stroke-linecap="round"/>
+    <circle cx="60" cy="60" r="12" fill="#35d07f" stroke="#0b2a5b" stroke-width="4"/>
   </symbol>
   <!-- Siren -->
   <symbol id="siren" viewBox="0 0 130 120">
-    <path d="M32 100h66l8 14H24Z" fill="#555568" stroke="#2b2b3a" stroke-width="5" stroke-linejoin="round"/>
-    <path d="M36 100V62a29 29 0 0 1 58 0v38Z" fill="#ff8f7a" stroke="#2b2b3a" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M32 100h66l8 14H24Z" fill="#555568" stroke="#0b2a5b" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M36 100V62a29 29 0 0 1 58 0v38Z" fill="#2f6fe0" stroke="#0b2a5b" stroke-width="5" stroke-linejoin="round"/>
     <path d="M48 96V64a17 17 0 0 1 12-16" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".8"/>
-    <path d="M65 8v14M24 18l8 10M106 18l-8 10M8 52l14 2M122 52l-14 2" stroke="#2b2b3a" stroke-width="5" stroke-linecap="round"/>
+    <path d="M65 8v14M24 18l8 10M106 18l-8 10M8 52l14 2M122 52l-14 2" stroke="#0b2a5b" stroke-width="5" stroke-linecap="round"/>
   </symbol>
   <!-- Portable GPS -->
   <symbol id="portable" viewBox="0 0 80 130">
-    <rect x="10" y="6" width="60" height="118" rx="22" fill="#ffb3d1" stroke="#2b2b3a" stroke-width="5"/>
-    <circle cx="40" cy="22" r="5" fill="#fff" stroke="#2b2b3a" stroke-width="3"/>
-    <rect x="20" y="36" width="40" height="46" rx="8" fill="#fff" stroke="#2b2b3a" stroke-width="3"/>
-    <path d="M40 74c-10-10-12-16-12-21a12 12 0 0 1 24 0c0 5-2 11-12 21Z" fill="#ff8f7a" stroke="#2b2b3a" stroke-width="3"/><circle cx="40" cy="53" r="4" fill="#fff"/>
-    <circle cx="40" cy="104" r="11" fill="#ffd95e" stroke="#2b2b3a" stroke-width="4"/>
+    <rect x="10" y="6" width="60" height="118" rx="22" fill="#8cc4ff" stroke="#0b2a5b" stroke-width="5"/>
+    <circle cx="40" cy="22" r="5" fill="#fff" stroke="#0b2a5b" stroke-width="3"/>
+    <rect x="20" y="36" width="40" height="46" rx="8" fill="#fff" stroke="#0b2a5b" stroke-width="3"/>
+    <path d="M40 74c-10-10-12-16-12-21a12 12 0 0 1 24 0c0 5-2 11-12 21Z" fill="#2f6fe0" stroke="#0b2a5b" stroke-width="3"/><circle cx="40" cy="53" r="4" fill="#fff"/>
+    <circle cx="40" cy="104" r="11" fill="#e4f2ff" stroke="#0b2a5b" stroke-width="4"/>
   </symbol>
   <!-- Server bank -->
   <symbol id="server" viewBox="0 0 120 130">
-    <g stroke="#2b2b3a" stroke-width="5" stroke-linejoin="round">
-      <rect x="10" y="8" width="100" height="34" rx="9" fill="#7be0c3"/><rect x="10" y="48" width="100" height="34" rx="9" fill="#8fd3ff"/><rect x="10" y="88" width="100" height="34" rx="9" fill="#ffd95e"/>
+    <g stroke="#0b2a5b" stroke-width="5" stroke-linejoin="round">
+      <rect x="10" y="8" width="100" height="34" rx="9" fill="#4aa8ff"/><rect x="10" y="48" width="100" height="34" rx="9" fill="#a9d8ff"/><rect x="10" y="88" width="100" height="34" rx="9" fill="#e4f2ff"/>
     </g>
-    <g fill="#2b2b3a"><circle cx="30" cy="25" r="5"/><circle cx="30" cy="65" r="5"/><circle cx="30" cy="105" r="5"/></g>
-    <path d="M52 25h42M52 65h42M52 105h42" stroke="#2b2b3a" stroke-width="5" stroke-linecap="round"/>
+    <g fill="#0b2a5b"><circle cx="30" cy="25" r="5"/><circle cx="30" cy="65" r="5"/><circle cx="30" cy="105" r="5"/></g>
+    <path d="M52 25h42M52 65h42M52 105h42" stroke="#0b2a5b" stroke-width="5" stroke-linecap="round"/>
   </symbol>
   <!-- House -->
   <symbol id="house" viewBox="0 0 140 120">
-    <path d="M14 56 70 8l56 48" fill="#ff8f7a" stroke="#2b2b3a" stroke-width="5" stroke-linejoin="round"/>
-    <rect x="24" y="54" width="92" height="60" fill="#fff3bd" stroke="#2b2b3a" stroke-width="5"/>
-    <rect x="58" y="76" width="24" height="38" rx="4" fill="#8fd3ff" stroke="#2b2b3a" stroke-width="4"/>
-    <rect x="32" y="66" width="20" height="20" fill="#fff" stroke="#2b2b3a" stroke-width="4"/><rect x="88" y="66" width="20" height="20" fill="#fff" stroke="#2b2b3a" stroke-width="4"/>
-    <path d="M70 46q-9-8-5-14 4-5 5 1 1-6 5-1 4 6-5 14Z" fill="#7be0c3" stroke="#2b2b3a" stroke-width="2.5" stroke-linejoin="round"/>
+    <path d="M14 56 70 8l56 48" fill="#2f6fe0" stroke="#0b2a5b" stroke-width="5" stroke-linejoin="round"/>
+    <rect x="24" y="54" width="92" height="60" fill="#eaf4ff" stroke="#0b2a5b" stroke-width="5"/>
+    <rect x="58" y="76" width="24" height="38" rx="4" fill="#a9d8ff" stroke="#0b2a5b" stroke-width="4"/>
+    <rect x="32" y="66" width="20" height="20" fill="#fff" stroke="#0b2a5b" stroke-width="4"/><rect x="88" y="66" width="20" height="20" fill="#fff" stroke="#0b2a5b" stroke-width="4"/>
+    <path d="M70 46q-9-8-5-14 4-5 5 1 1-6 5-1 4 6-5 14Z" fill="#4aa8ff" stroke="#0b2a5b" stroke-width="2.5" stroke-linejoin="round"/>
   </symbol>
   <!-- Kid -->
   <symbol id="kid" viewBox="0 0 110 130">
-    <path d="M22 124c0-28 12-42 33-42s33 14 33 42Z" fill="#ffd95e" stroke="#2b2b3a" stroke-width="4"/>
-    <circle cx="55" cy="48" r="28" fill="#ffd3b0" stroke="#2b2b3a" stroke-width="4"/>
-    <path d="M27 44c4-30 52-30 56 0-10-8-18-10-28-10s-18 2-28 10Z" fill="#d45a2a" stroke="#2b2b3a" stroke-width="4" stroke-linejoin="round"/>
-    <circle cx="44" cy="52" r="3.5" fill="#2b2b3a"/><circle cx="66" cy="52" r="3.5" fill="#2b2b3a"/>
-    <path d="M44 64q11 10 22 0" fill="#fff" stroke="#2b2b3a" stroke-width="3.5" stroke-linecap="round"/>
-    <circle cx="38" cy="62" r="4" fill="#ff8f7a" opacity=".6"/><circle cx="72" cy="62" r="4" fill="#ff8f7a" opacity=".6"/>
+    <path d="M22 124c0-28 12-42 33-42s33 14 33 42Z" fill="#e4f2ff" stroke="#0b2a5b" stroke-width="4"/>
+    <circle cx="55" cy="48" r="28" fill="#ffdcc2" stroke="#0b2a5b" stroke-width="4"/>
+    <path d="M27 44c4-30 52-30 56 0-10-8-18-10-28-10s-18 2-28 10Z" fill="#d45a2a" stroke="#0b2a5b" stroke-width="4" stroke-linejoin="round"/>
+    <circle cx="44" cy="52" r="3.5" fill="#0b2a5b"/><circle cx="66" cy="52" r="3.5" fill="#0b2a5b"/>
+    <path d="M44 64q11 10 22 0" fill="#fff" stroke="#0b2a5b" stroke-width="3.5" stroke-linecap="round"/>
+    <circle cx="38" cy="62" r="4" fill="#2f6fe0" opacity=".6"/><circle cx="72" cy="62" r="4" fill="#2f6fe0" opacity=".6"/>
   </symbol>
   <!-- School -->
   <symbol id="school" viewBox="0 0 140 120">
-    <path d="M70 6 6 40h128Z" fill="#c9b6ff" stroke="#2b2b3a" stroke-width="5" stroke-linejoin="round"/>
-    <rect x="14" y="40" width="112" height="72" fill="#fff3bd" stroke="#2b2b3a" stroke-width="5"/>
-    <rect x="56" y="70" width="28" height="42" rx="4" fill="#8fd3ff" stroke="#2b2b3a" stroke-width="4"/>
-    <g fill="#fff" stroke="#2b2b3a" stroke-width="4"><rect x="24" y="54" width="22" height="22"/><rect x="94" y="54" width="22" height="22"/></g>
-    <path d="M70 6V-2" stroke="#2b2b3a" stroke-width="4"/><path d="M70 -2h18l-6 6 6 6H70" fill="#ff8f7a" stroke="#2b2b3a" stroke-width="3" transform="translate(0,6)"/>
+    <path d="M70 6 6 40h128Z" fill="#7aa2ff" stroke="#0b2a5b" stroke-width="5" stroke-linejoin="round"/>
+    <rect x="14" y="40" width="112" height="72" fill="#eaf4ff" stroke="#0b2a5b" stroke-width="5"/>
+    <rect x="56" y="70" width="28" height="42" rx="4" fill="#a9d8ff" stroke="#0b2a5b" stroke-width="4"/>
+    <g fill="#fff" stroke="#0b2a5b" stroke-width="4"><rect x="24" y="54" width="22" height="22"/><rect x="94" y="54" width="22" height="22"/></g>
+    <path d="M70 6V-2" stroke="#0b2a5b" stroke-width="4"/><path d="M70 -2h18l-6 6 6 6H70" fill="#2f6fe0" stroke="#0b2a5b" stroke-width="3" transform="translate(0,6)"/>
   </symbol>
   <!-- Lock shield -->
   <symbol id="lock" viewBox="0 0 100 120">
-    <path d="M30 52V34a20 20 0 0 1 40 0v18" fill="none" stroke="#2b2b3a" stroke-width="9" stroke-linecap="round"/>
-    <rect x="12" y="50" width="76" height="62" rx="14" fill="#ffd95e" stroke="#2b2b3a" stroke-width="5"/>
-    <circle cx="50" cy="76" r="8" fill="#2b2b3a"/><path d="M50 80v16" stroke="#2b2b3a" stroke-width="6" stroke-linecap="round"/>
+    <path d="M30 52V34a20 20 0 0 1 40 0v18" fill="none" stroke="#0b2a5b" stroke-width="9" stroke-linecap="round"/>
+    <rect x="12" y="50" width="76" height="62" rx="14" fill="#e4f2ff" stroke="#0b2a5b" stroke-width="5"/>
+    <circle cx="50" cy="76" r="8" fill="#0b2a5b"/><path d="M50 80v16" stroke="#0b2a5b" stroke-width="6" stroke-linecap="round"/>
   </symbol>
   <!-- Robot assistant -->
   <symbol id="robot" viewBox="0 0 100 110">
-    <path d="M50 6v14" stroke="#2b2b3a" stroke-width="5" stroke-linecap="round"/><circle cx="50" cy="6" r="6" fill="#ff8f7a" stroke="#2b2b3a" stroke-width="3"/>
-    <rect x="12" y="20" width="76" height="62" rx="20" fill="#fff" stroke="#2b2b3a" stroke-width="5"/>
-    <circle cx="36" cy="48" r="10" fill="#8fd3ff" stroke="#2b2b3a" stroke-width="3.5"/><circle cx="64" cy="48" r="10" fill="#8fd3ff" stroke="#2b2b3a" stroke-width="3.5"/>
-    <circle cx="38" cy="50" r="4" fill="#2b2b3a"/><circle cx="66" cy="50" r="4" fill="#2b2b3a"/>
-    <path d="M36 68q14 10 28 0" fill="none" stroke="#2b2b3a" stroke-width="4" stroke-linecap="round"/>
-    <path d="M30 86h40v16H30Z" fill="#7be0c3" stroke="#2b2b3a" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M50 6v14" stroke="#0b2a5b" stroke-width="5" stroke-linecap="round"/><circle cx="50" cy="6" r="6" fill="#2f6fe0" stroke="#0b2a5b" stroke-width="3"/>
+    <rect x="12" y="20" width="76" height="62" rx="20" fill="#fff" stroke="#0b2a5b" stroke-width="5"/>
+    <circle cx="36" cy="48" r="10" fill="#a9d8ff" stroke="#0b2a5b" stroke-width="3.5"/><circle cx="64" cy="48" r="10" fill="#a9d8ff" stroke="#0b2a5b" stroke-width="3.5"/>
+    <circle cx="38" cy="50" r="4" fill="#0b2a5b"/><circle cx="66" cy="50" r="4" fill="#0b2a5b"/>
+    <path d="M36 68q14 10 28 0" fill="none" stroke="#0b2a5b" stroke-width="4" stroke-linecap="round"/>
+    <path d="M30 86h40v16H30Z" fill="#4aa8ff" stroke="#0b2a5b" stroke-width="4" stroke-linejoin="round"/>
   </symbol>
   <!-- Doodle bits -->
-  <symbol id="star" viewBox="0 0 50 50"><path d="m25 3 6 15 16 1-12 11 4 16-14-9-14 9 4-16L3 19l16-1Z" fill="#ffd95e" stroke="#2b2b3a" stroke-width="3" stroke-linejoin="round"/></symbol>
-  <symbol id="heart" viewBox="0 0 50 46"><path d="M25 43C6 29 2 18 7 10c5-7 14-5 18 2 4-7 13-9 18-2 5 8 1 19-18 33Z" fill="#ffb3d1" stroke="#2b2b3a" stroke-width="3" stroke-linejoin="round"/></symbol>
-  <symbol id="cloud" viewBox="0 0 120 60"><path d="M26 54a18 18 0 0 1 2-36 26 26 0 0 1 50-4 20 20 0 0 1 20 40Z" fill="#fff" stroke="#2b2b3a" stroke-width="3.5" stroke-linejoin="round"/></symbol>
-  <symbol id="squiggle" viewBox="0 0 120 30"><path d="M4 18q10-18 20 0t20 0 20 0 20 0 20 0 12-6" fill="none" stroke="#2b2b3a" stroke-width="4" stroke-linecap="round"/></symbol>
-  <symbol id="spark" viewBox="0 0 40 40"><path d="M20 2v36M2 20h36M7 7l26 26M33 7 7 33" stroke="#2b2b3a" stroke-width="3.5" stroke-linecap="round"/></symbol>
+  <symbol id="star" viewBox="0 0 50 50"><path d="m25 3 6 15 16 1-12 11 4 16-14-9-14 9 4-16L3 19l16-1Z" fill="#e4f2ff" stroke="#0b2a5b" stroke-width="3" stroke-linejoin="round"/></symbol>
+  <symbol id="heart" viewBox="0 0 50 46"><path d="M25 43C6 29 2 18 7 10c5-7 14-5 18 2 4-7 13-9 18-2 5 8 1 19-18 33Z" fill="#8cc4ff" stroke="#0b2a5b" stroke-width="3" stroke-linejoin="round"/></symbol>
+  <symbol id="cloud" viewBox="0 0 120 60"><path d="M26 54a18 18 0 0 1 2-36 26 26 0 0 1 50-4 20 20 0 0 1 20 40Z" fill="#fff" stroke="#0b2a5b" stroke-width="3.5" stroke-linejoin="round"/></symbol>
+  <symbol id="squiggle" viewBox="0 0 120 30"><path d="M4 18q10-18 20 0t20 0 20 0 20 0 20 0 12-6" fill="none" stroke="#0b2a5b" stroke-width="4" stroke-linecap="round"/></symbol>
+  <symbol id="spark" viewBox="0 0 40 40"><path d="M20 2v36M2 20h36M7 7l26 26M33 7 7 33" stroke="#0b2a5b" stroke-width="3.5" stroke-linecap="round"/></symbol>
 </defs>
 </svg>
 
-<div class="concept-banner" role="note">🎨 Student concept project – not a real product for sale.</div>
+<div class="concept-banner" role="note">Student concept project – not a real product for sale.</div>
 
 <!-- ============ NAV ============ -->
 <nav aria-label="Main navigation">
@@ -440,14 +402,10 @@ footer a { color: var(--sun); }
 <!-- ============ 1. HERO ============ -->
 <header class="hero" id="home">
   <!-- floating background doodles -->
-  <svg class="deco bob" style="left:3%;top:30px;width:110px" viewBox="0 0 120 60" aria-hidden="true"><use href="#cloud"/></svg>
-  <svg class="deco bob" style="right:30%;top:14px;width:90px;animation-delay:1s" viewBox="0 0 120 60" aria-hidden="true"><use href="#cloud"/></svg>
-  <svg class="deco bob" style="left:46%;bottom:14px;width:44px;animation-delay:.5s" viewBox="0 0 50 50" aria-hidden="true"><use href="#star"/></svg>
-  <svg class="deco" style="left:6%;bottom:10px;width:120px" viewBox="0 0 120 30" aria-hidden="true"><use href="#squiggle"/></svg>
 
   <div class="wrap hero-grid">
     <div>
-      <p class="eyebrow">A student invention ✏️</p>
+      <p class="eyebrow">A student invention</p>
       <h1>HPSG – Home Protective Safe Guard</h1>
       <p class="tagline"><mark>Protection online and at home.</mark> No subscription.</p>
       <p class="lead">Meet the friendly safety hub that spots scam calls, texts, and emails, and keeps an eye on your home too. Made to help grandparents and the whole family feel safe.</p>
@@ -459,7 +417,6 @@ footer a { color: var(--sun); }
     <div class="hero-art">
       <div class="speech">Hi, I’m Shieldy! 👋</div>
       <svg class="doodle bob" viewBox="0 0 120 140" role="img" aria-label="Shieldy, the smiling shield mascot of HPSG"><use href="#mascot"/></svg>
-      <svg class="deco bob" style="right:0;bottom:30px;width:56px;animation-delay:.8s" viewBox="0 0 50 46" aria-hidden="true"><use href="#heart"/></svg>
     </div>
   </div>
 </header>
@@ -477,7 +434,6 @@ footer a { color: var(--sun); }
 
 <!-- ============ 2. PROBLEM ============ -->
 <section id="problem">
-  <svg class="deco bob" style="right:4%;top:30px;width:50px" viewBox="0 0 40 40" aria-hidden="true"><use href="#spark"/></svg>
   <div class="wrap">
     <p class="eyebrow">The Problem</p>
     <h2>Scammers pick on the people we love</h2>
@@ -709,9 +665,9 @@ footer a { color: var(--sun); }
     <h3 style="margin-top:56px">What families (might) say</h3>
     <p class="fine">Pretend quotes from imaginary people, just for the demo.</p>
     <div class="grid">
-      <div class="card tint-pink"><svg class="avatar" viewBox="0 0 120 130" aria-hidden="true"><use href="#grandma"/></svg><b>Dorothy, 74</b><p class="quote">“It told me a call was a scam before I even picked up. My grandson was so proud.”</p></div>
-      <div class="card tint-sky"><svg class="avatar" viewBox="0 0 110 130" aria-hidden="true"><use href="#grandson"/></svg><b>Marcus, 17</b><p class="quote">“I got a text asking if grandma was okay. Turned out to be a fake call. Saved $800!”</p></div>
-      <div class="card tint-sun"><svg class="avatar" viewBox="0 0 110 130" aria-hidden="true"><use href="#kid"/></svg><b>Priya, 11</b><p class="quote">“The green light means safe. I like checking it every morning.”</p></div>
+      <div class="card tint-pink"><div class="avatar" aria-hidden="true">D</div><b>Dorothy, 74</b><p class="quote">“It told me a call was a scam before I even picked up. My grandson was so proud.”</p></div>
+      <div class="card tint-sky"><div class="avatar" aria-hidden="true">M</div><b>Marcus, 17</b><p class="quote">“I got a text asking if grandma was okay. Turned out to be a fake call. Saved $800!”</p></div>
+      <div class="card tint-sun"><div class="avatar" aria-hidden="true">P</div><b>Priya, 11</b><p class="quote">“The green light means safe. I like checking it every morning.”</p></div>
     </div>
 
     <h3 style="margin-top:56px">Questions people ask</h3>
